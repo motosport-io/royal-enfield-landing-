@@ -4,6 +4,8 @@
   var CONFIG = window.RE_CONFIG || {};
   var MODELS = (window.RE_MODELS || []).filter(function (m) { return m && m.trims && m.trims.length; });
   var STANDARD_TRIM_LABEL = 'גרסה רגילה';
+  var BASE_TITLE = 'Royal Enfield ישראל';
+  var CONSENT_KEY = 're-cookie-consent';
 
   var state = { model: 0, trim: 0, color: 0 };
 
@@ -16,12 +18,26 @@
   }
   function formatPrice(n) { return Number(n).toLocaleString('he-IL') + ' ₪'; }
   function trimLabel(t) { return t.name || STANDARD_TRIM_LABEL; }
+  // English names are marked lang="en" so screen readers switch pronunciation
+  function en(text, cls) {
+    var s = el('span', cls, text);
+    s.lang = 'en';
+    s.dir = 'ltr';
+    return s;
+  }
 
   function current() {
     var model = MODELS[state.model];
     var trim = model.trims[state.trim] || model.trims[0];
     var color = trim.colors && trim.colors.length ? trim.colors[state.color] || trim.colors[0] : null;
     return { model: model, trim: trim, color: color };
+  }
+
+  function selectionText(c) {
+    var parts = [c.model.name];
+    if (c.model.trims.length > 1 || c.trim.name) parts.push(trimLabel(c.trim));
+    if (c.color) parts.push(c.color.name);
+    return parts.join(', ');
   }
 
   function modelThumb(model) {
@@ -34,13 +50,21 @@
   }
 
   function swatch(color) {
-    var wrap = el('span', 'color-btn__swatch');
+    var wrap = el('span', 'color-opt__swatch');
+    wrap.setAttribute('aria-hidden', 'true');
     (color.swatch && color.swatch.length ? color.swatch : ['#ccc']).slice(0, 2).forEach(function (hex) {
       var dot = el('i');
       dot.style.background = hex;
       wrap.appendChild(dot);
     });
     return wrap;
+  }
+
+  function announce(text) {
+    var a = $('announcer');
+    a.textContent = '';
+    // a short delay makes screen readers treat repeated text as a new announcement
+    setTimeout(function () { a.textContent = text; }, 50);
   }
 
   // ---- Static parts built once -------------------------------------------------
@@ -61,20 +85,27 @@
         img.decoding = 'async';
         btn.appendChild(img);
       } else {
-        btn.appendChild(el('span', 'model-btn__ph', model.name.replace(/\D/g, '')));
+        var ph = el('span', 'model-btn__ph', model.name.replace(/\D/g, ''));
+        ph.setAttribute('aria-hidden', 'true');
+        btn.appendChild(ph);
       }
-      btn.appendChild(el('span', 'model-btn__name', model.name));
+      btn.appendChild(en(model.name, 'model-btn__name'));
       btn.addEventListener('click', function () { selectModel(i, true); });
       li.appendChild(btn);
       list.appendChild(li);
 
       var opt = el('option', null, model.name);
       opt.value = i;
+      opt.lang = 'en';
       select.appendChild(opt);
 
+      // Dots repeat the model list for mouse/touch users; keyboard and screen-reader users
+      // get the same function from the model list, so the dots stay out of the Tab order.
       var dot = el('button', 'pager__dot');
       dot.type = 'button';
-      dot.setAttribute('aria-label', model.name);
+      dot.tabIndex = -1;
+      dot.setAttribute('aria-hidden', 'true');
+      dot.setAttribute('aria-label', 'הצגת דגם ' + model.name);
       dot.addEventListener('click', function () { selectModel(i, true); });
       $('pager-dots').appendChild(dot);
     });
@@ -88,12 +119,68 @@
     selectModel((state.model + dir + MODELS.length) % MODELS.length, true);
   }
 
-  // ---- Rendering --------------------------------------------------------------
-  function render() {
-    var c = current();
-    var model = c.model, trim = c.trim, color = c.color;
+  // ---- Rendering ----------------------------------------------------------------
+  // Model → rebuilds the trim radios. Trim → rebuilds the color radios. Neither
+  // rebuilds the group that holds keyboard focus, so focus is never lost.
+  function renderModel() {
+    var model = MODELS[state.model];
 
     $('stage-model').textContent = model.name;
+    $('placeholder-name').textContent = model.name;
+    document.title = model.name + ' | ' + BASE_TITLE;
+
+    var video = $('stage-video');
+    video.hidden = !model.video;
+    if (model.video) {
+      video.href = model.video;
+      $('stage-video-sr').textContent = ' של ' + model.name + ' (נפתח בחלון חדש)';
+    }
+
+    var trimList = $('trim-list');
+    trimList.textContent = '';
+    $('trims').hidden = model.trims.length < 2;
+    model.trims.forEach(function (t, i) {
+      var label = el('label', 'trim-opt');
+      var input = el('input');
+      input.type = 'radio';
+      input.name = 'trim';
+      input.value = i;
+      input.checked = i === state.trim;
+      input.addEventListener('change', function () {
+        state.trim = i;
+        state.color = 0;
+        renderTrim();
+        announce('רמת גימור ' + trimLabel(t) + ', מחיר ' + formatPrice(t.price));
+      });
+      var box = el('span', 'trim-opt__box');
+      box.appendChild(t.name ? en(t.name) : el('span', null, STANDARD_TRIM_LABEL));
+      box.appendChild(el('span', 'trim-opt__price', formatPrice(t.price)));
+      label.appendChild(input);
+      label.appendChild(box);
+      trimList.appendChild(label);
+    });
+
+    var phrases = $('phrases');
+    phrases.textContent = '';
+    (model.phrases || []).slice(0, 3).forEach(function (p) { phrases.appendChild(el('li', null, p)); });
+
+    document.querySelectorAll('.model-btn').forEach(function (b, i) {
+      b.setAttribute('aria-pressed', i === state.model ? 'true' : 'false');
+    });
+    document.querySelectorAll('.pager__dot').forEach(function (d, i) {
+      d.setAttribute('aria-pressed', i === state.model ? 'true' : 'false');
+    });
+    $('f-model').value = state.model;
+
+    var grade = model.pollutionGrade != null ? model.pollutionGrade : CONFIG.pollutionGrade;
+    $('pollution-grade').textContent = grade != null ? grade : '';
+    $('grade-row').hidden = grade == null;
+
+    renderTrim();
+  }
+
+  function renderTrim() {
+    var trim = current().trim;
 
     var price = $('stage-price');
     price.textContent = '';
@@ -102,104 +189,98 @@
     price.appendChild(document.createTextNode(' '));
     price.appendChild(el('small', null, '(לפני הוצאות רישוי)'));
 
-    var video = $('stage-video');
-    video.hidden = !model.video;
-    if (model.video) video.href = model.video;
-
-    // Trims: shown only when the model has more than one
-    var trimList = $('trim-list');
-    trimList.textContent = '';
-    $('trims').hidden = model.trims.length < 2;
-    trimList.setAttribute('role', 'radiogroup');
-    trimList.setAttribute('aria-label', 'רמת גימור');
-    model.trims.forEach(function (t, i) {
-      var b = el('button', 'trim-btn');
-      b.type = 'button';
-      b.setAttribute('role', 'radio');
-      b.setAttribute('aria-checked', i === state.trim ? 'true' : 'false');
-      b.appendChild(document.createTextNode(trimLabel(t)));
-      b.appendChild(el('span', 'trim-btn__price', formatPrice(t.price)));
-      b.addEventListener('click', function () { state.trim = i; state.color = 0; render(); });
-      trimList.appendChild(b);
-    });
-
-    // Colors: only those of the selected trim
     var colorList = $('color-list');
     colorList.textContent = '';
     var colors = trim.colors || [];
     $('colors').hidden = !colors.length;
-    colorList.setAttribute('role', 'radiogroup');
-    colorList.setAttribute('aria-label', 'צבע');
     colors.forEach(function (col, i) {
-      var li = el('li');
-      var b = el('button', 'color-btn');
-      b.type = 'button';
-      b.setAttribute('role', 'radio');
-      b.setAttribute('aria-checked', i === state.color ? 'true' : 'false');
-      b.appendChild(swatch(col));
-      b.appendChild(el('span', 'color-btn__name', col.name));
-      b.addEventListener('click', function () { state.color = i; render(); });
-      li.appendChild(b);
-      colorList.appendChild(li);
+      var label = el('label', 'color-opt');
+      var input = el('input');
+      input.type = 'radio';
+      input.name = 'color';
+      input.value = i;
+      input.checked = i === state.color;
+      input.addEventListener('change', function () {
+        state.color = i;
+        renderColor();
+        announce('צבע ' + col.name);
+      });
+      label.appendChild(input);
+      label.appendChild(swatch(col));
+      label.appendChild(el('span', 'color-opt__name', col.name));
+      colorList.appendChild(label);
     });
+
+    renderColor();
+  }
+
+  function renderColor() {
+    var c = current();
+    var colors = c.trim.colors || [];
 
     // Bike image for the exact trim + color; placeholder until real images are added
     var img = $('stage-img');
-    var src = (color && color.image) || (!colors.length ? modelThumb(model) : '');
+    if (!img) {
+      img = el('img');
+      img.id = 'stage-img';
+      img.decoding = 'async';
+      $('stage-bike').insertBefore(img, $('stage-placeholder'));
+    }
+    var src = (c.color && c.color.image) || (!colors.length ? modelThumb(c.model) : '');
     if (src) {
       if (img.getAttribute('src') !== src) img.src = src;
-      img.alt = [model.name, trim.name, color && color.name].filter(Boolean).join(' – ');
+      img.alt = 'אופנוע ' + selectionText(c);
       img.hidden = false;
       $('stage-placeholder').hidden = true;
     } else {
       img.hidden = true;
       img.removeAttribute('src');
-      $('placeholder-name').textContent = model.name;
       $('stage-placeholder').hidden = false;
     }
 
-    var phrases = $('phrases');
-    phrases.textContent = '';
-    (model.phrases || []).slice(0, 3).forEach(function (p) { phrases.appendChild(el('li', null, p)); });
-
-    document.querySelectorAll('.model-btn').forEach(function (b, i) {
-      b.setAttribute('aria-current', i === state.model ? 'true' : 'false');
-    });
-    document.querySelectorAll('.pager__dot').forEach(function (d, i) {
-      d.setAttribute('aria-current', i === state.model ? 'true' : 'false');
-    });
-    $('f-model').value = state.model;
-
-    $('lead-choice').textContent = 'הבחירה שלך: ' + [model.name, trim.name, color && color.name].filter(Boolean).join(' · ');
-
-    var grade = model.pollutionGrade != null ? model.pollutionGrade : CONFIG.pollutionGrade;
-    $('pollution-grade').textContent = grade != null ? grade : '';
-    $('pollution-grade').parentNode.hidden = grade == null;
-
+    $('lead-choice').textContent = 'הבחירה שלך: ' + selectionText(c);
     updateFloatingWhatsApp();
   }
 
-  function selectModel(i, scrollIntoView) {
-    if (i === state.model && $('stage-model').textContent) return;
+  function selectModel(i, fromList) {
+    if (i === state.model) return;
     state.model = i;
     state.trim = 0;
     state.color = 0;
-    render();
+    renderModel();
+    var c = current();
+    announce('נבחר דגם ' + selectionText(c) + ', מחיר ' + formatPrice(c.trim.price));
     if (history.replaceState) history.replaceState(null, '', '#' + MODELS[i].id);
-    if (scrollIntoView) {
-      var btn = document.querySelector('.model-btn[data-index="' + i + '"]');
-      if (btn && btn.scrollIntoView) btn.scrollIntoView({ block: 'nearest', inline: 'nearest' });
-    }
+    if (fromList) revealModelButton(i);
   }
 
-  // ---- WhatsApp ---------------------------------------------------------------
+  // Scrolls only the model list (not the page). Unlike scrollIntoView it does not move the
+  // browser's Tab starting point, so a deep link (#meteor-350) still starts at the skip links.
+  function revealModelButton(i) {
+    var btn = document.querySelector('.model-btn[data-index="' + i + '"]');
+    if (!btn) return;
+    [btn.closest('.models__list'), btn.closest('.models')].forEach(function (box) {
+      if (!box) return;
+      var b = box.getBoundingClientRect();
+      var r = btn.getBoundingClientRect();
+      if (box.scrollWidth > box.clientWidth) {
+        if (r.left < b.left) box.scrollLeft -= b.left - r.left;
+        else if (r.right > b.right) box.scrollLeft += r.right - b.right;
+      }
+      if (box.scrollHeight > box.clientHeight) {
+        if (r.top < b.top) box.scrollTop -= b.top - r.top;
+        else if (r.bottom > b.bottom) box.scrollTop += r.bottom - b.bottom;
+      }
+    });
+  }
+
+  // ---- WhatsApp -----------------------------------------------------------------
   function waUrl(text) {
     return 'https://wa.me/' + CONFIG.whatsappNumber + '?text=' + encodeURIComponent(text);
   }
 
   function updateFloatingWhatsApp() {
-    var c = current();
-    var text = 'שלום, אשמח לקבל פרטים על Royal Enfield ' + c.model.name;
+    var text = 'שלום, אשמח לקבל פרטים על Royal Enfield ' + current().model.name;
     document.querySelectorAll('.js-wa-float').forEach(function (a) { a.href = waUrl(text); });
   }
 
@@ -209,7 +290,7 @@
       event: event,
       campaign: 'royal-enfield-landing',
       model: c.model.name,
-      trim: c.trim.name || STANDARD_TRIM_LABEL,
+      trim: trimLabel(c.trim),
       color: c.color ? c.color.name : ''
     };
     for (var k in extra) payload[k] = extra[k];
@@ -228,46 +309,74 @@
 
   function setupForm() {
     var form = $('lead-form');
-    var error = $('form-error');
-    var nameInput = $('f-name');
-    var phoneInput = $('f-phone');
-    var emailInput = $('f-email');
-    var terms = $('f-terms');
+    var summary = $('error-summary');
+    var fields = {
+      name: $('f-name'),
+      phone: $('f-phone'),
+      email: $('f-email'),
+      terms: $('f-terms')
+    };
 
-    function fail(input, message) {
-      error.textContent = message;
-      if (input.type !== 'checkbox') input.setAttribute('aria-invalid', 'true');
-      input.focus();
+    function setError(input, message) {
+      var err = $(input.id + '-error');
+      err.textContent = message || '';
+      if (message) input.setAttribute('aria-invalid', 'true');
+      else input.removeAttribute('aria-invalid');
     }
 
-    [nameInput, phoneInput, emailInput].forEach(function (input) {
-      input.addEventListener('input', function () { input.removeAttribute('aria-invalid'); error.textContent = ''; });
+    function validate() {
+      var errors = [];
+      var name = fields.name.value.trim();
+      var email = fields.email.value.trim();
+      if (name.length < 2) errors.push([fields.name, 'נא למלא שם מלא (לפחות 2 תווים).']);
+      if (!fields.phone.value.trim()) errors.push([fields.phone, 'נא למלא מספר טלפון.']);
+      else if (!normalizePhone(fields.phone.value)) errors.push([fields.phone, 'מספר הטלפון אינו תקין. יש להקליד 9 או 10 ספרות, לדוגמה 050-1234567.']);
+      if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errors.push([fields.email, 'כתובת הדוא"ל אינה תקינה. לדוגמה: name@example.com. אפשר גם להשאיר את השדה ריק.']);
+      if (!fields.terms.checked) errors.push([fields.terms, 'יש לאשר את תנאי השימוש ומדיניות הפרטיות כדי לשלוח את הפרטים.']);
+      return errors;
+    }
+
+    Object.keys(fields).forEach(function (key) {
+      var input = fields[key];
+      input.addEventListener(input.type === 'checkbox' ? 'change' : 'input', function () {
+        if (input.getAttribute('aria-invalid') === 'true') setError(input, '');
+      });
     });
-    terms.addEventListener('change', function () { error.textContent = ''; });
 
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-      error.textContent = '';
-      $('form-done').hidden = true;
+      $('form-done').textContent = '';
+      Object.keys(fields).forEach(function (k) { setError(fields[k], ''); });
 
-      var name = nameInput.value.trim();
-      var phone = normalizePhone(phoneInput.value);
-      var email = emailInput.value.trim();
-
-      if (name.length < 2) return fail(nameInput, 'נא למלא שם מלא');
-      if (!phone) return fail(phoneInput, 'נא למלא מספר טלפון תקין');
-      if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return fail(emailInput, 'כתובת הדוא"ל אינה תקינה');
-      if (!terms.checked) return fail(terms, 'יש לאשר את תנאי השימוש ומדיניות הפרטיות');
+      var errors = validate();
+      var list = $('error-list');
+      list.textContent = '';
+      if (errors.length) {
+        errors.forEach(function (pair) {
+          setError(pair[0], pair[1]);
+          var li = el('li');
+          var a = el('a', null, pair[1]);
+          a.href = '#' + pair[0].id;
+          a.addEventListener('click', function (ev) { ev.preventDefault(); pair[0].focus(); });
+          li.appendChild(a);
+          list.appendChild(li);
+        });
+        summary.hidden = false;
+        summary.focus();
+        return;
+      }
+      summary.hidden = true;
 
       var c = current();
+      var email = fields.email.value.trim();
       var lines = [
         'שלום, אשמח לתאם רכיבת מבחן / לקבל פרטים על Royal Enfield',
-        'שם: ' + name,
-        'טלפון: ' + phone
+        'שם: ' + fields.name.value.trim(),
+        'טלפון: ' + normalizePhone(fields.phone.value)
       ];
       if (email) lines.push('דוא"ל: ' + email);
       lines.push('דגם: ' + c.model.name);
-      lines.push('רמת גימור: ' + (c.trim.name || STANDARD_TRIM_LABEL));
+      lines.push('רמת גימור: ' + trimLabel(c.trim));
       if (c.color) lines.push('צבע: ' + c.color.name);
       lines.push('מחיר: ' + formatPrice(c.trim.price));
       lines.push('אישור דיוור שיווקי: ' + ($('f-marketing').checked ? 'כן' : 'לא'));
@@ -277,32 +386,71 @@
 
       var win = window.open(url, '_blank', 'noopener');
       if (!win) window.location.href = url;
-      $('form-done').hidden = false;
+      $('form-done').textContent = 'תודה! נפתחה שיחת WhatsApp עם הפרטים שלך. כדי להשלים את הפנייה יש ללחוץ "שליחה" ב-WhatsApp.';
     });
   }
 
-  // ---- Config-driven links ----------------------------------------------------
-  function linkOrText(id, href) {
-    var node = $(id);
-    if (!node || !href) return;
-    var a = el('a', null, node.textContent);
-    a.href = href;
-    a.target = '_blank';
-    a.rel = 'noopener';
-    node.replaceWith(a);
+  // ---- Cookie consent + Google Tag Manager ------------------------------------
+  function readConsent() {
+    try { return window.localStorage.getItem(CONSENT_KEY); } catch (e) { return null; }
+  }
+  function saveConsent(value) {
+    try { window.localStorage.setItem(CONSENT_KEY, value); } catch (e) { /* storage blocked: ask again next visit */ }
   }
 
+  var gtmLoaded = false;
+  function loadGtm() {
+    var id = CONFIG.gtmId;
+    if (!id || gtmLoaded) return;
+    gtmLoaded = true;
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtm.js?id=' + encodeURIComponent(id);
+    document.head.appendChild(s);
+  }
+
+  function setupCookies() {
+    var banner = $('cookie-banner');
+    var consent = readConsent();
+    if (consent === 'granted') loadGtm();
+    else if (consent !== 'denied') banner.hidden = false;
+
+    function close(value, message) {
+      saveConsent(value);
+      banner.hidden = true;
+      if (value === 'granted') loadGtm();
+      announce(message);
+      // return focus to where the user opened the settings from, or to the page start
+      var back = $('cookie-settings').dataset.opened ? $('cookie-settings') : $('stage-title');
+      if (back === $('stage-title')) back.setAttribute('tabindex', '-1');
+      back.focus();
+      delete $('cookie-settings').dataset.opened;
+    }
+    $('cookie-accept').addEventListener('click', function () { close('granted', 'עוגיות המדידה אושרו.'); });
+    $('cookie-decline').addEventListener('click', function () {
+      close('denied', gtmLoaded ? 'עוגיות המדידה נדחו. השינוי ייכנס לתוקף בטעינה הבאה של הדף.' : 'עוגיות המדידה נדחו.');
+    });
+    $('cookie-settings').addEventListener('click', function () {
+      $('cookie-settings').dataset.opened = '1';
+      banner.hidden = false;
+      $('cookie-accept').focus();
+    });
+  }
+
+  // ---- Config-driven links --------------------------------------------------------
   function applyConfig() {
     if (CONFIG.testRidePhone) {
       document.querySelectorAll('.js-phone').forEach(function (a) {
         a.textContent = CONFIG.testRidePhone;
         a.href = 'tel:' + CONFIG.testRidePhone.replace(/\D/g, '');
+        if (a.hasAttribute('aria-label')) a.setAttribute('aria-label', 'חיוג לתיאום רכיבת מבחן ' + CONFIG.testRidePhone);
       });
     }
-    if (CONFIG.importerUrl) $('importer-link').href = CONFIG.importerUrl;
-    if (CONFIG.importerLabel) $('importer-link').textContent = CONFIG.importerLabel;
-    linkOrText('terms-link', CONFIG.termsUrl);
-    linkOrText('accessibility-link', CONFIG.accessibilityUrl);
+    var importer = $('importer-link');
+    if (CONFIG.importerUrl) importer.href = CONFIG.importerUrl;
+    if (CONFIG.importerLabel) importer.firstChild.nodeValue = CONFIG.importerLabel;
     document.querySelectorAll('.js-wa-float').forEach(function (a) {
       a.addEventListener('click', function (e) { if (e.isTrusted) track('whatsapp_click', { cta_location: 'float' }); });
     });
@@ -318,23 +466,44 @@
       sticky.classList.toggle('is-visible', show);
       sticky.setAttribute('aria-hidden', show ? 'false' : 'true');
       link.tabIndex = show ? 0 : -1;
+      document.documentElement.classList.toggle('has-sticky', show);
     }, { threshold: 0 }).observe($('lead'));
   }
 
-  // ---- Init -------------------------------------------------------------------
+  // ---- Keep the focused element clear of the fixed bars (sticky CTA, WhatsApp button)
+  function setupFocusClearance() {
+    var fixed = [$('sticky-cta'), document.querySelector('.wa-float')];
+    document.addEventListener('focusin', function (e) {
+      var target = e.target;
+      if (!target.getBoundingClientRect || fixed.some(function (f) { return f && f.contains(target); })) return;
+      // wait a frame so the browser's own scroll-into-view and the sticky bar update land first
+      requestAnimationFrame(function () {
+        var r = target.getBoundingClientRect();
+        var shift = 0;
+        fixed.forEach(function (f) {
+          if (!f || getComputedStyle(f).display === 'none') return;
+          var b = f.getBoundingClientRect();
+          if (b.top >= window.innerHeight) return; // bar is off-screen
+          var overlapsX = r.left < b.right && r.right > b.left;
+          var overlapsY = r.top < b.bottom && r.bottom > b.top;
+          if (overlapsX && overlapsY) shift = Math.max(shift, r.bottom - b.top + 12);
+        });
+        if (shift) window.scrollBy(0, shift);
+      });
+    });
+  }
+
+  // ---- Init -------------------------------------------------------------------------
   if (!MODELS.length) return;
   buildModelList();
   applyConfig();
   setupForm();
+  setupCookies();
   setupStickyCta();
+  setupFocusClearance();
 
   var fromHash = location.hash.slice(1);
-  var start = 0;
-  MODELS.forEach(function (m, i) { if (m.id === fromHash) start = i; });
-  state.model = start;
-  render();
-  if (start) {
-    var btn = document.querySelector('.model-btn[data-index="' + start + '"]');
-    if (btn && btn.scrollIntoView) btn.scrollIntoView({ block: 'nearest', inline: 'nearest' });
-  }
+  MODELS.forEach(function (m, i) { if (m.id === fromHash) state.model = i; });
+  renderModel();
+  if (state.model) revealModelButton(state.model);
 })();

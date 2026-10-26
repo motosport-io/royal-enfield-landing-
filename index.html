@@ -20,44 +20,47 @@
 
   <!-- Site settings and model list (edit this file to update the page) -->
   <script src="/assets/data/models.js"></script>
-  <!-- Google Tag Manager: loaded only when RE_CONFIG.gtmId is set -->
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    (function (id) {
-      if (!id) return;
-      window.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
-      var s = document.createElement('script');
-      s.async = true;
-      s.src = 'https://www.googletagmanager.com/gtm.js?id=' + id;
-      document.head.appendChild(s);
-    })(window.RE_CONFIG && window.RE_CONFIG.gtmId);
-  </script>
 </head>
 <body>
-  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <a class="skip-link" href="#models-heading">דילוג לבחירת דגם</a>
+  <a class="skip-link" href="#lead-heading">דילוג לטופס יצירת קשר</a>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
     <symbol id="wa-icon" viewBox="0 0 24 24"><path d="M17.47 14.38c-.3-.15-1.75-.86-2.02-.96-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.25-.46-2.38-1.47-.88-.79-1.47-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.6-.92-2.2-.24-.58-.49-.5-.67-.5h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48 0 1.46 1.07 2.88 1.21 3.07.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.7.63.71.22 1.36.19 1.87.12.57-.09 1.75-.72 2-1.41.25-.69.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35M12.05 21.5h-.01a9.4 9.4 0 0 1-4.8-1.32l-.34-.2-3.57.94.95-3.48-.22-.36A9.4 9.4 0 0 1 2.6 12.04C2.6 6.84 6.84 2.6 12.05 2.6c2.52 0 4.89.98 6.67 2.77a9.37 9.37 0 0 1 2.76 6.67c0 5.2-4.24 9.45-9.43 9.45m8.03-17.48A11.3 11.3 0 0 0 12.05.7C5.8.7.7 5.79.7 12.04c0 2 .52 3.95 1.52 5.66L.6 23.3l5.73-1.5a11.33 11.33 0 0 0 5.72 1.46c6.25 0 11.34-5.09 11.34-11.34 0-3.03-1.18-5.88-3.31-8.02"/></symbol>
   </svg>
 
+  <!-- Cookie consent: not modal, does not take focus; analytics load only after "אישור" -->
+  <section class="cookie" id="cookie-banner" aria-labelledby="cookie-title" hidden>
+    <h2 class="cookie__title" id="cookie-title">שימוש בעוגיות</h2>
+    <p class="cookie__text">אנחנו רוצים להשתמש בעוגיות מדידה (Google Tag Manager) כדי להבין איך משתמשים באתר. העוגיות יופעלו רק אם תאשרו. פרטים נוספים ב<a href="/privacy">מדיניות הפרטיות</a>.</p>
+    <div class="cookie__actions">
+      <button type="button" class="btn btn--gold" id="cookie-accept">אישור עוגיות מדידה</button>
+      <button type="button" class="btn btn--outline" id="cookie-decline">דחייה</button>
+    </div>
+  </section>
+
   <!-- Mobile / tablet top bar (hidden on desktop, where the logo sits in the form) -->
   <header class="topbar">
-    <img src="/assets/images/brand/royal-enfield-logo.png" width="140" height="72" alt="Royal Enfield">
-    <a class="topbar__phone js-phone" href="tel:0732799258" dir="ltr">073-2799258</a>
+    <img src="/assets/images/brand/royal-enfield-logo.png" width="140" height="72" alt="Royal Enfield" lang="en">
+    <a class="topbar__phone js-phone" href="tel:0732799258" dir="ltr" aria-label="חיוג לתיאום רכיבת מבחן 073-2799258">073-2799258</a>
   </header>
 
   <main class="layout">
 
     <!-- Right: model list -->
-    <nav class="models" aria-label="דגמים">
+    <nav class="models" aria-labelledby="models-heading">
+      <h2 class="sr-only" id="models-heading" tabindex="-1">בחירת דגם</h2>
       <ul class="models__list" id="model-list"></ul>
     </nav>
 
     <!-- Center: selected bike -->
-    <section class="stage" aria-live="polite">
+    <section class="stage" aria-labelledby="stage-title">
+      <noscript><p class="stage__noscript">להצגת הדגמים ולשליחת הטופס יש להפעיל JavaScript בדפדפן. לתיאום רכיבת מבחן אפשר להתקשר: <a href="tel:0732799258" dir="ltr">073-2799258</a></p></noscript>
       <header class="stage__head">
-        <h1 class="stage__headline">ההרפתקה הבאה שלך מתחילה כאן</h1>
-        <h2 class="stage__model" id="stage-model" dir="ltr"></h2>
+        <h1 class="stage__headline" id="stage-title">ההרפתקה הבאה שלך מתחילה כאן</h1>
+        <h2 class="stage__model" id="stage-model" dir="ltr" lang="en">Royal Enfield</h2>
         <p class="stage__price" id="stage-price"></p>
-        <a class="stage__video" id="stage-video" href="#" target="_blank" rel="noopener" hidden>לצפייה בסרטון</a>
+        <a class="stage__video" id="stage-video" href="#" target="_blank" rel="noopener" hidden>לצפייה בסרטון<span class="sr-only" id="stage-video-sr"></span></a>
       </header>
 
       <div class="stage__body">
@@ -68,90 +71,130 @@
           </fieldset>
           <fieldset class="colors" id="colors" hidden>
             <legend>צבע</legend>
-            <ul class="colors__list" id="color-list"></ul>
+            <div class="colors__list" id="color-list"></div>
           </fieldset>
         </div>
 
         <figure class="stage__bike" id="stage-bike">
-          <img id="stage-img" alt="" hidden>
           <figcaption class="stage__placeholder" id="stage-placeholder">
-            <span id="placeholder-name" dir="ltr"></span>
+            <span id="placeholder-name" dir="ltr" lang="en"></span>
             <small>תמונת הדגם תתווסף בקרוב</small>
           </figcaption>
         </figure>
       </div>
 
+      <h3 class="sr-only">יתרונות הדגם</h3>
       <ul class="phrases" id="phrases"></ul>
 
-      <div class="pager">
-        <button type="button" class="pager__arrow" id="pager-prev" aria-label="הדגם הקודם">&#10095;</button>
+      <div class="pager" role="group" aria-label="מעבר בין דגמים">
+        <button type="button" class="pager__arrow" id="pager-prev" aria-label="הדגם הקודם"><span aria-hidden="true">&#10095;</span></button>
         <div class="pager__dots" id="pager-dots"></div>
-        <button type="button" class="pager__arrow" id="pager-next" aria-label="הדגם הבא">&#10094;</button>
+        <button type="button" class="pager__arrow" id="pager-next" aria-label="הדגם הבא"><span aria-hidden="true">&#10094;</span></button>
       </div>
+
+      <!-- Screen-reader announcement when the selection changes -->
+      <p class="sr-only" id="announcer" aria-live="polite" aria-atomic="true"></p>
     </section>
 
     <!-- Left: contact form -->
-    <aside class="lead" id="lead">
+    <section class="lead" id="lead" aria-labelledby="lead-heading">
       <div class="lead__panel">
-        <img class="lead__logo" src="/assets/images/brand/royal-enfield-logo.png" width="140" height="72" alt="Royal Enfield">
-        <h2 class="lead__title">המותג האייקוני<br>שכבש את השוק העולמי</h2>
+        <img class="lead__logo" src="/assets/images/brand/royal-enfield-logo.png" width="140" height="72" alt="Royal Enfield" lang="en">
+        <h2 class="lead__title" id="lead-heading" tabindex="-1">המותג האייקוני<br>שכבש את השוק העולמי</h2>
         <p class="lead__intro">לתיאום רכיבת מבחן התקשרו <a class="js-phone" href="tel:0732799258" dir="ltr">073-2799258</a><br>או השאירו פרטים:</p>
 
+        <div class="lead__summary" id="error-summary" tabindex="-1" hidden>
+          <h3>יש לתקן את השדות הבאים:</h3>
+          <ul id="error-list"></ul>
+        </div>
+
         <form class="lead__form" id="lead-form" novalidate>
-          <label class="sr-only" for="f-name">שם</label>
-          <input id="f-name" name="name" type="text" placeholder="שם:" autocomplete="name" required>
+          <p class="lead__required-note">שדות המסומנים ב-<span aria-hidden="true">*</span><span class="sr-only">כוכבית</span> הם שדות חובה.</p>
 
-          <label class="sr-only" for="f-phone">טלפון</label>
-          <input id="f-phone" name="phone" type="tel" placeholder="טלפון:" autocomplete="tel" inputmode="tel" required>
+          <div class="field">
+            <label for="f-name">שם מלא <span class="req" aria-hidden="true">*</span></label>
+            <input id="f-name" name="name" type="text" autocomplete="name" required aria-describedby="f-name-error">
+            <p class="field__error" id="f-name-error"></p>
+          </div>
 
-          <label class="sr-only" for="f-email">דוא"ל (לא חובה)</label>
-          <input id="f-email" name="email" type="email" placeholder='דוא"ל:' autocomplete="email" inputmode="email">
+          <div class="field">
+            <label for="f-phone">טלפון <span class="req" aria-hidden="true">*</span></label>
+            <input id="f-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" dir="ltr" required aria-describedby="f-phone-hint f-phone-error">
+            <p class="field__hint" id="f-phone-hint">לדוגמה: <span dir="ltr">050-1234567</span></p>
+            <p class="field__error" id="f-phone-error"></p>
+          </div>
 
-          <label class="sr-only" for="f-model">דגם</label>
-          <select id="f-model" name="model"></select>
+          <div class="field">
+            <label for="f-email"><abbr title="דואר אלקטרוני">דוא"ל</abbr> (לא חובה)</label>
+            <input id="f-email" name="email" type="email" autocomplete="email" inputmode="email" dir="ltr" aria-describedby="f-email-hint f-email-error">
+            <p class="field__hint" id="f-email-hint">לדוגמה: <span dir="ltr">name@example.com</span></p>
+            <p class="field__error" id="f-email-error"></p>
+          </div>
 
-          <p class="lead__choice" id="lead-choice"></p>
+          <div class="field">
+            <label for="f-model">דגם</label>
+            <select id="f-model" name="model" aria-describedby="lead-choice"></select>
+            <p class="lead__choice" id="lead-choice"></p>
+          </div>
 
-          <label class="check">
-            <input type="checkbox" id="f-terms" name="terms" required>
-            <span>אני מאשר שמירת הפרטים במאגרי החברה ושימוש במידע הנמסר בהתאם <span id="terms-link">לתנאי השימוש ומדיניות הפרטיות</span> של החברה.</span>
-          </label>
-          <label class="check">
-            <input type="checkbox" id="f-marketing" name="marketing">
-            <span>הנני מאשר לדוד לובינסקי בע"מ ו/או לצדדים שלישיים הקשורים אליה לשלוח אלי דיוור שיווקי ואחר בכל אמצעי תקשורת לרבות הודעות אלקטרוניות ובשיחה טלפונית.</span>
-          </label>
+          <div class="field">
+            <div class="check">
+              <input type="checkbox" id="f-terms" name="terms" required aria-describedby="f-terms-error">
+              <label for="f-terms">אני מאשר שמירת הפרטים במאגרי החברה ושימוש במידע הנמסר בהתאם לתנאי השימוש ומדיניות הפרטיות של החברה. <span class="req" aria-hidden="true">*</span></label>
+            </div>
+            <p class="check__links">
+              <a href="/terms" target="_blank" rel="noopener">תנאי השימוש<span class="sr-only"> (נפתח בחלון חדש)</span></a>
+              <span aria-hidden="true">|</span>
+              <a href="/privacy" target="_blank" rel="noopener">מדיניות הפרטיות<span class="sr-only"> (נפתח בחלון חדש)</span></a>
+            </p>
+            <p class="field__error" id="f-terms-error"></p>
+          </div>
 
-          <p class="lead__error" id="form-error" role="alert"></p>
+          <div class="field">
+            <div class="check">
+              <input type="checkbox" id="f-marketing" name="marketing">
+              <label for="f-marketing">הנני מאשר לדוד לובינסקי בע"מ ו/או לצדדים שלישיים הקשורים אליה לשלוח אלי דיוור שיווקי ואחר בכל אמצעי תקשורת לרבות הודעות אלקטרוניות ובשיחה טלפונית. (לא חובה)</label>
+            </div>
+          </div>
 
-          <button type="submit" class="lead__submit">שלח &laquo;</button>
-          <p class="lead__done" id="form-done" role="status" hidden>תודה! נפתחה שיחת WhatsApp עם הפרטים שלך – נותר רק ללחוץ "שליחה".</p>
+          <p class="lead__note" id="submit-note">לחיצה על "שלח" תפתח את WhatsApp בחלון חדש עם הודעה מוכנה. ההודעה תישלח רק אחרי שתבדקו אותה ותלחצו "שליחה" ב-WhatsApp.</p>
+
+          <button type="submit" class="lead__submit" aria-describedby="submit-note">שלח <span aria-hidden="true">&laquo;</span></button>
+          <p class="lead__done" id="form-done" role="status"></p>
         </form>
       </div>
-    </aside>
+    </section>
   </main>
 
   <footer class="footer">
+    <h2 class="sr-only">מידע נוסף</h2>
     <div class="footer__brand">
-      <img src="/assets/images/brand/dlb-motosport-logo.png" width="228" height="60" alt="D.L.B MotoSport – The Best Adventure You Can Get">
+      <img src="/assets/images/brand/dlb-motosport-logo.png" width="228" height="60" alt="D.L.B MotoSport – The Best Adventure You Can Get" lang="en">
     </div>
     <div class="footer__info">
-      <p class="footer__grade">דרגת זיהום אוויר <span class="grade" id="pollution-grade"></span></p>
-      <p>לפרטים <a id="importer-link" href="https://motosport.co.il/brand/royal-enfield" target="_blank" rel="noopener" dir="ltr">www.motosport.co.il</a></p>
+      <p class="footer__grade" id="grade-row">דרגת זיהום אוויר: <span class="grade" id="pollution-grade"></span></p>
+      <p>לפרטים: <a id="importer-link" href="https://motosport.co.il/brand/royal-enfield" target="_blank" rel="noopener" dir="ltr">www.motosport.co.il<span class="sr-only" dir="rtl"> – אתר היבואן (נפתח בחלון חדש)</span></a></p>
     </div>
     <div class="footer__legal">
-      <p><span id="accessibility-link">הצהרת נגישות</span></p>
-      <p>בכפוף למלאי | בכפוף לדגמים ולצבעים הקיימים במלאי | הדגמים והצעות המכר עלולים להשתנות בהתאם לשיקולה הבלעדי של החברה בכפוף למלאי הקיים ובכפוף לדגם ספציפי | החברה רשאית לשנות את הצעות המכר בכל שלב בהתאם לשיקולה הבלעדי | ט.ל.ח | המחירים לפני הוצאות רישוי</p>
+      <ul class="footer__links">
+        <li><a href="/terms">תנאי שימוש</a></li>
+        <li><a href="/privacy">מדיניות פרטיות</a></li>
+        <li><button type="button" class="link-btn" id="cookie-settings">הגדרות עוגיות</button></li>
+      </ul>
+      <p>בכפוף למלאי | בכפוף לדגמים ולצבעים הקיימים במלאי | הדגמים והצעות המכר עלולים להשתנות בהתאם לשיקולה הבלעדי של החברה בכפוף למלאי הקיים ובכפוף לדגם ספציפי | החברה רשאית לשנות את הצעות המכר בכל שלב בהתאם לשיקולה הבלעדי | <abbr title="טעות לעולם חוזרת">ט.ל.ח</abbr> | המחירים לפני הוצאות רישוי</p>
     </div>
   </footer>
 
+  <aside aria-label="פעולות מהירות">
   <!-- Mobile: jump to the form while it is off-screen -->
   <div class="sticky-cta" id="sticky-cta" aria-hidden="true">
-    <a href="#lead" tabindex="-1">לתיאום רכיבת מבחן &laquo;</a>
+    <a href="#lead-heading" tabindex="-1">לתיאום רכיבת מבחן <span aria-hidden="true">&laquo;</span></a>
   </div>
 
-  <a class="wa-float js-wa-float" href="#" target="_blank" rel="noopener" aria-label="שיחה בוואטסאפ">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#wa-icon"/></svg>
+  <a class="wa-float js-wa-float" href="#" target="_blank" rel="noopener" aria-label="שיחה בוואטסאפ (נפתח בחלון חדש)">
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#wa-icon"/></svg>
   </a>
+  </aside>
 
   <script src="/assets/js/app.js"></script>
 </body>

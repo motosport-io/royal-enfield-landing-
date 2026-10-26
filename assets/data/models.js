@@ -26,14 +26,12 @@ window.RE_CONFIG = {
   whatsappNumber: '972524502150',
   // Phone shown in the form ("לתיאום רכיבת מבחן התקשרו ...").
   testRidePhone: '073-2799258',
-  // Links shown in the form consent text and in the footer. Empty = shown as plain text.
-  termsUrl: '',
-  accessibilityUrl: '',
   importerUrl: 'https://motosport.co.il/brand/royal-enfield',
   importerLabel: 'www.motosport.co.il',
   // Air-pollution grade shown in the footer. A model can override it with its own `pollutionGrade`.
   pollutionGrade: 2,
-  // Google Tag Manager container ID (e.g. 'GTM-XXXXXXX'). Empty = GTM is not loaded.
+  // Google Tag Manager container ID (e.g. 'GTM-XXXXXXX'). Loaded only after the visitor accepts
+  // the cookie banner. Empty = GTM is never loaded.
   gtmId: ''
 };
 
