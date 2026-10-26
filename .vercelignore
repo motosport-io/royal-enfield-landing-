@@ -1,0 +1,4 @@
+# Internal files – not uploaded to Vercel (the build publishes dist/ only)
+docs/
+README.md
+serve.json
