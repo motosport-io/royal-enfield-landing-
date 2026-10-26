@@ -1,0 +1,6 @@
+# Internal files – not published with the site
+docs/
+scripts/
+README.md
+serve.json
+assets/images/README.md

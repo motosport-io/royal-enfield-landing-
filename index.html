@@ -13,9 +13,7 @@
   <meta property="og:title" content="Royal Enfield ישראל | ההרפתקה הבאה שלך מתחילה כאן">
   <meta property="og:description" content="בחרו דגם, רמת גימור וצבע ותאמו רכיבת מבחן בוואטסאפ.">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800&family=Karantina:wght@400;700&family=Oswald:wght@500;600&display=swap">
+  <link rel="stylesheet" href="/assets/css/fonts.css">
   <link rel="stylesheet" href="/assets/css/styles.css">
 
   <!-- Site settings and model list (edit this file to update the page) -->
@@ -29,13 +27,13 @@
     <symbol id="wa-icon" viewBox="0 0 24 24"><path d="M17.47 14.38c-.3-.15-1.75-.86-2.02-.96-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.25-.46-2.38-1.47-.88-.79-1.47-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.6-.92-2.2-.24-.58-.49-.5-.67-.5h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48 0 1.46 1.07 2.88 1.21 3.07.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.7.63.71.22 1.36.19 1.87.12.57-.09 1.75-.72 2-1.41.25-.69.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35M12.05 21.5h-.01a9.4 9.4 0 0 1-4.8-1.32l-.34-.2-3.57.94.95-3.48-.22-.36A9.4 9.4 0 0 1 2.6 12.04C2.6 6.84 6.84 2.6 12.05 2.6c2.52 0 4.89.98 6.67 2.77a9.37 9.37 0 0 1 2.76 6.67c0 5.2-4.24 9.45-9.43 9.45m8.03-17.48A11.3 11.3 0 0 0 12.05.7C5.8.7.7 5.79.7 12.04c0 2 .52 3.95 1.52 5.66L.6 23.3l5.73-1.5a11.33 11.33 0 0 0 5.72 1.46c6.25 0 11.34-5.09 11.34-11.34 0-3.03-1.18-5.88-3.31-8.02"/></symbol>
   </svg>
 
-  <!-- Cookie consent: not modal, does not take focus; analytics load only after "אישור" -->
+  <!-- Cookie consent: not modal, does not take focus. Measurement/marketing tags load only after "אישור" -->
   <section class="cookie" id="cookie-banner" aria-labelledby="cookie-title" hidden>
     <h2 class="cookie__title" id="cookie-title">שימוש בעוגיות</h2>
-    <p class="cookie__text">אנחנו רוצים להשתמש בעוגיות מדידה (Google Tag Manager) כדי להבין איך משתמשים באתר. העוגיות יופעלו רק אם תאשרו. פרטים נוספים ב<a href="/privacy">מדיניות הפרטיות</a>.</p>
+    <p class="cookie__text">נשמח להשתמש בעוגיות שאינן הכרחיות – למדידה, לסטטיסטיקה ולשיווק (באמצעות Google Tag Manager) – כדי לשפר את האתר. הן יופעלו רק אם תאשרו, ואפשר לשנות את הבחירה בכל עת דרך "הגדרות עוגיות" בתחתית העמוד. פרטים נוספים ב<a href="/privacy">מדיניות הפרטיות</a>.</p>
     <div class="cookie__actions">
-      <button type="button" class="btn btn--gold" id="cookie-accept">אישור עוגיות מדידה</button>
-      <button type="button" class="btn btn--outline" id="cookie-decline">דחייה</button>
+      <button type="button" class="btn btn--gold" id="cookie-accept">אישור עוגיות שאינן הכרחיות</button>
+      <button type="button" class="btn btn--outline" id="cookie-decline">דחיית עוגיות שאינן הכרחיות</button>
     </div>
   </section>
 
@@ -139,25 +137,20 @@
 
           <div class="field">
             <div class="check">
-              <input type="checkbox" id="f-terms" name="terms" required aria-describedby="f-terms-error">
-              <label for="f-terms">אני מאשר שמירת הפרטים במאגרי החברה ושימוש במידע הנמסר בהתאם לתנאי השימוש ומדיניות הפרטיות של החברה. <span class="req" aria-hidden="true">*</span></label>
+              <input type="checkbox" id="f-privacy" name="privacy" required aria-describedby="f-privacy-error">
+              <label for="f-privacy">קראתי את <a href="/privacy" target="_blank" rel="noopener">מדיניות הפרטיות<span class="sr-only"> (נפתח בחלון חדש)</span></a> ואני מאשר את השימוש בפרטים שמסרתי לצורך טיפול בפנייתי. <span class="req" aria-hidden="true">*</span></label>
             </div>
-            <p class="check__links">
-              <a href="/terms" target="_blank" rel="noopener">תנאי השימוש<span class="sr-only"> (נפתח בחלון חדש)</span></a>
-              <span aria-hidden="true">|</span>
-              <a href="/privacy" target="_blank" rel="noopener">מדיניות הפרטיות<span class="sr-only"> (נפתח בחלון חדש)</span></a>
-            </p>
-            <p class="field__error" id="f-terms-error"></p>
+            <p class="field__error" id="f-privacy-error"></p>
           </div>
 
           <div class="field">
             <div class="check">
               <input type="checkbox" id="f-marketing" name="marketing">
-              <label for="f-marketing">הנני מאשר לדוד לובינסקי בע"מ ו/או לצדדים שלישיים הקשורים אליה לשלוח אלי דיוור שיווקי ואחר בכל אמצעי תקשורת לרבות הודעות אלקטרוניות ובשיחה טלפונית. (לא חובה)</label>
+              <label for="f-marketing">אני מאשר לקבל מד.ל.ב מוטוספורט בע״מ עדכונים, הטבות והצעות שיווקיות באמצעות דוא״ל, SMS ו־WhatsApp. ידוע לי שאוכל להסיר את הסכמתי בכל עת. <span class="check__optional">(לא חובה)</span></label>
             </div>
           </div>
 
-          <p class="lead__note" id="submit-note">לחיצה על "שלח" תפתח את WhatsApp בחלון חדש עם הודעה מוכנה. ההודעה תישלח רק אחרי שתבדקו אותה ותלחצו "שליחה" ב-WhatsApp.</p>
+          <p class="lead__note" id="submit-note">לחיצה על "שלח" תפתח את WhatsApp בחלון חדש עם הודעה מוכנה. הפנייה לא נשלחת מהאתר: היא תישלח רק אחרי שתבדקו את ההודעה ותלחצו "שליחה" ב-WhatsApp.</p>
 
           <button type="submit" class="lead__submit" aria-describedby="submit-note">שלח <span aria-hidden="true">&laquo;</span></button>
           <p class="lead__done" id="form-done" role="status"></p>
@@ -172,7 +165,6 @@
       <img src="/assets/images/brand/dlb-motosport-logo.png" width="228" height="60" alt="D.L.B MotoSport – The Best Adventure You Can Get" lang="en">
     </div>
     <div class="footer__info">
-      <p class="footer__grade" id="grade-row">דרגת זיהום אוויר: <span class="grade" id="pollution-grade"></span></p>
       <p>לפרטים: <a id="importer-link" href="https://motosport.co.il/brand/royal-enfield" target="_blank" rel="noopener" dir="ltr">www.motosport.co.il<span class="sr-only" dir="rtl"> – אתר היבואן (נפתח בחלון חדש)</span></a></p>
     </div>
     <div class="footer__legal">

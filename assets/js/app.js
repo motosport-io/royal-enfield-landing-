@@ -33,6 +33,16 @@
     return { model: model, trim: trim, color: color };
   }
 
+  // A color stays selected after a trim change only if the new trim offers the same color;
+  // otherwise the first color of the new trim is selected, so the picture, the checked
+  // radio and the WhatsApp message always show the same, available color.
+  function colorIndexFor(trim, previous) {
+    var colors = trim.colors || [];
+    if (!previous) return 0;
+    for (var i = 0; i < colors.length; i++) if (colors[i].name === previous.name) return i;
+    return 0;
+  }
+
   function selectionText(c) {
     var parts = [c.model.name];
     if (c.model.trims.length > 1 || c.trim.name) parts.push(trimLabel(c.trim));
@@ -147,10 +157,14 @@
       input.value = i;
       input.checked = i === state.trim;
       input.addEventListener('change', function () {
+        var before = current().color;
         state.trim = i;
-        state.color = 0;
+        state.color = colorIndexFor(t, before);
         renderTrim();
-        announce('רמת גימור ' + trimLabel(t) + ', מחיר ' + formatPrice(t.price));
+        var c = current();
+        var msg = 'רמת גימור ' + trimLabel(t) + ', מחיר ' + formatPrice(t.price);
+        if (c.color) msg += ', צבע ' + c.color.name + (before && before.name === c.color.name ? '' : ' (הצבע הוחלף לצבע זמין ברמת גימור זו)');
+        announce(msg);
       });
       var box = el('span', 'trim-opt__box');
       box.appendChild(t.name ? en(t.name) : el('span', null, STANDARD_TRIM_LABEL));
@@ -171,10 +185,6 @@
       d.setAttribute('aria-pressed', i === state.model ? 'true' : 'false');
     });
     $('f-model').value = state.model;
-
-    var grade = model.pollutionGrade != null ? model.pollutionGrade : CONFIG.pollutionGrade;
-    $('pollution-grade').textContent = grade != null ? grade : '';
-    $('grade-row').hidden = grade == null;
 
     renderTrim();
   }
@@ -226,7 +236,8 @@
       img.decoding = 'async';
       $('stage-bike').insertBefore(img, $('stage-placeholder'));
     }
-    var src = (c.color && c.color.image) || (!colors.length ? modelThumb(c.model) : '');
+    // a trim without colors may carry its own `image`; never borrow another trim's color photo
+    var src = c.color ? c.color.image : (!colors.length ? c.trim.image : '');
     if (src) {
       if (img.getAttribute('src') !== src) img.src = src;
       img.alt = 'אופנוע ' + selectionText(c);
@@ -314,7 +325,7 @@
       name: $('f-name'),
       phone: $('f-phone'),
       email: $('f-email'),
-      terms: $('f-terms')
+      privacy: $('f-privacy')
     };
 
     function setError(input, message) {
@@ -332,7 +343,7 @@
       if (!fields.phone.value.trim()) errors.push([fields.phone, 'נא למלא מספר טלפון.']);
       else if (!normalizePhone(fields.phone.value)) errors.push([fields.phone, 'מספר הטלפון אינו תקין. יש להקליד 9 או 10 ספרות, לדוגמה 050-1234567.']);
       if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errors.push([fields.email, 'כתובת הדוא"ל אינה תקינה. לדוגמה: name@example.com. אפשר גם להשאיר את השדה ריק.']);
-      if (!fields.terms.checked) errors.push([fields.terms, 'יש לאשר את תנאי השימוש ומדיניות הפרטיות כדי לשלוח את הפרטים.']);
+      if (!fields.privacy.checked) errors.push([fields.privacy, 'יש לאשר שקראת את מדיניות הפרטיות כדי לשלוח את הפנייה.']);
       return errors;
     }
 
@@ -376,9 +387,9 @@
       ];
       if (email) lines.push('דוא"ל: ' + email);
       lines.push('דגם: ' + c.model.name);
-      lines.push('רמת גימור: ' + trimLabel(c.trim));
+      // trim only when the model has trims to choose from, or a named single trim
+      if (c.model.trims.length > 1 || c.trim.name) lines.push('רמת גימור: ' + trimLabel(c.trim));
       if (c.color) lines.push('צבע: ' + c.color.name);
-      lines.push('מחיר: ' + formatPrice(c.trim.price));
       lines.push('אישור דיוור שיווקי: ' + ($('f-marketing').checked ? 'כן' : 'לא'));
 
       var url = waUrl(lines.join('\n'));
@@ -386,16 +397,45 @@
 
       var win = window.open(url, '_blank', 'noopener');
       if (!win) window.location.href = url;
-      $('form-done').textContent = 'תודה! נפתחה שיחת WhatsApp עם הפרטים שלך. כדי להשלים את הפנייה יש ללחוץ "שליחה" ב-WhatsApp.';
+      // The site only prepares the message; nothing has been sent yet
+      $('form-done').textContent = 'נפתחה הודעת WhatsApp מוכנה עם הפרטים שלך. הפנייה עדיין לא נשלחה – כדי לשלוח אותה יש ללחוץ "שליחה" ב-WhatsApp.';
     });
   }
 
   // ---- Cookie consent + Google Tag Manager ------------------------------------
+  // Choice is kept in localStorage as { value: 'granted' | 'denied', date, version }.
+  // Bump CONSENT_VERSION when the cookie policy changes to ask everyone again.
+  var CONSENT_VERSION = 1;
   function readConsent() {
-    try { return window.localStorage.getItem(CONSENT_KEY); } catch (e) { return null; }
+    try {
+      var raw = JSON.parse(window.localStorage.getItem(CONSENT_KEY));
+      return raw && raw.version === CONSENT_VERSION ? raw.value : null;
+    } catch (e) { return null; }
   }
   function saveConsent(value) {
-    try { window.localStorage.setItem(CONSENT_KEY, value); } catch (e) { /* storage blocked: ask again next visit */ }
+    try {
+      window.localStorage.setItem(CONSENT_KEY, JSON.stringify({ value: value, date: new Date().toISOString(), version: CONSENT_VERSION }));
+    } catch (e) { /* storage blocked: ask again next visit */ }
+  }
+
+  // Google Consent Mode: everything non-essential is denied until the visitor accepts
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { window.dataLayer.push(arguments); }
+  var DENIED = { ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'denied' };
+  var GRANTED = { ad_storage: 'granted', ad_user_data: 'granted', ad_personalization: 'granted', analytics_storage: 'granted' };
+  gtag('consent', 'default', DENIED);
+
+  // Measurement/marketing cookies set by Google Analytics, Google Ads and Meta Pixel
+  function deleteTrackingCookies() {
+    var host = location.hostname;
+    var domains = ['', host, '.' + host, '.' + host.split('.').slice(-2).join('.')];
+    document.cookie.split(';').forEach(function (c) {
+      var name = c.split('=')[0].trim();
+      if (!/^(_ga|_gid|_gat|_gcl_|_fbp|_fbc|_uet|_clck|_clsk)/.test(name)) return;
+      domains.forEach(function (d) {
+        document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/' + (d ? '; domain=' + d : '');
+      });
+    });
   }
 
   var gtmLoaded = false;
@@ -403,7 +443,7 @@
     var id = CONFIG.gtmId;
     if (!id || gtmLoaded) return;
     gtmLoaded = true;
-    window.dataLayer = window.dataLayer || [];
+    gtag('consent', 'update', GRANTED);
     window.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
     var s = document.createElement('script');
     s.async = true;
@@ -415,12 +455,25 @@
     var banner = $('cookie-banner');
     var consent = readConsent();
     if (consent === 'granted') loadGtm();
-    else if (consent !== 'denied') banner.hidden = false;
+    else {
+      deleteTrackingCookies();
+      if (consent !== 'denied') banner.hidden = false;
+    }
 
     function close(value, message) {
       saveConsent(value);
       banner.hidden = true;
       if (value === 'granted') loadGtm();
+      else {
+        deleteTrackingCookies();
+        if (gtmLoaded) {
+          // Scripts that already ran cannot be unloaded: tell them consent was withdrawn,
+          // then reload so the page continues without them
+          gtag('consent', 'update', DENIED);
+          window.location.reload();
+          return;
+        }
+      }
       announce(message);
       // return focus to where the user opened the settings from, or to the page start
       var back = $('cookie-settings').dataset.opened ? $('cookie-settings') : $('stage-title');
@@ -428,15 +481,17 @@
       back.focus();
       delete $('cookie-settings').dataset.opened;
     }
-    $('cookie-accept').addEventListener('click', function () { close('granted', 'עוגיות המדידה אושרו.'); });
-    $('cookie-decline').addEventListener('click', function () {
-      close('denied', gtmLoaded ? 'עוגיות המדידה נדחו. השינוי ייכנס לתוקף בטעינה הבאה של הדף.' : 'עוגיות המדידה נדחו.');
-    });
-    $('cookie-settings').addEventListener('click', function () {
+    $('cookie-accept').addEventListener('click', function () { close('granted', 'העוגיות שאינן הכרחיות אושרו.'); });
+    $('cookie-decline').addEventListener('click', function () { close('denied', 'העוגיות שאינן הכרחיות נדחו.'); });
+    function openSettings() {
       $('cookie-settings').dataset.opened = '1';
       banner.hidden = false;
       $('cookie-accept').focus();
-    });
+    }
+    $('cookie-settings').addEventListener('click', openSettings);
+    // "הגדרות עוגיות" on the legal pages links here as /#cookies
+    if (location.hash === '#cookies') openSettings();
+    window.addEventListener('hashchange', function () { if (location.hash === '#cookies') openSettings(); });
   }
 
   // ---- Config-driven links --------------------------------------------------------

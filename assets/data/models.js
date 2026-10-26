@@ -12,6 +12,7 @@
  *   trims    – one or more trims. A model with a single trim shows no trim selector.
  *     name   – trim name as it appears in the price list. Empty ('') = the standard version.
  *     price  – price in ₪, before licensing costs (number, no commas).
+ *     image  – optional studio image for a trim that has no color list.
  *     colors – colors available for this trim. Empty list = the color selector is hidden.
  *       name   – color name in Hebrew (as shown to the customer and sent in WhatsApp).
  *       swatch – one or two hex colors for the color circle, e.g. ['#8a1c1c'] or ['#c0c0c0', '#2b2b2b'].
@@ -28,8 +29,6 @@ window.RE_CONFIG = {
   testRidePhone: '073-2799258',
   importerUrl: 'https://motosport.co.il/brand/royal-enfield',
   importerLabel: 'www.motosport.co.il',
-  // Air-pollution grade shown in the footer. A model can override it with its own `pollutionGrade`.
-  pollutionGrade: 2,
   // Google Tag Manager container ID (e.g. 'GTM-XXXXXXX'). Loaded only after the visitor accepts
   // the cookie banner. Empty = GTM is never loaded.
   gtmId: ''
