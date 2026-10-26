@@ -19,7 +19,8 @@ assets/css/styles.css            עיצוב
 assets/js/app.js                 בחירת דגם/גימור/צבע ושליחה לוואטסאפ
 assets/images/brand/             לוגואים
 assets/images/models/<id>/       תמונות סטודיו לכל דגם (<trim>--<color>.webp)
-assets/images/gallery/           תמונות אווירה (סליידר – טרם מומש)
+assets/images/gallery/           תמונות אווירה – מופיעות אוטומטית בגלריה מתחת לאזור הראשי
+scripts/build.js                 בניית האתר ל-dist/ (מה שמתפרסם ב-Vercel) + רשימת תמונות הגלריה
 vercel.json                      הגדרות Vercel (cache, headers)
 ```
 
@@ -62,11 +63,17 @@ vercel.json                      הגדרות Vercel (cache, headers)
 
 ## הרצה מקומית
 ```
-npx serve .
+node scripts/build.js && npx serve dist
 ```
+(`npx serve .` עובד גם, אבל בלי הגלריה – רשימת התמונות שלה נוצרת רק בבנייה.)
+
+## גלריית תמונות אווירה
+מעלים תמונות ל-`assets/images/gallery/` (שמות כמו `meteor-350-01.webp`) – בבנייה הבאה ב-Vercel הן מופיעות בגלריה מתחת לאזור הראשי, לפי סדר שמות הקבצים.
+כל עוד התיקייה ריקה, הגלריה לא מוצגת בכלל (אין אזור ריק ואין תמונות דמה).
+הטקסט החלופי נגזר משם הקובץ: קובץ שמתחיל במזהה דגם (`meteor-350-…`) יקבל "Royal Enfield Meteor 350 – תמונת אווירה N". אין מעבר אוטומטי בין תמונות.
 
 ## פרסום ב-Vercel
-לייבא את ה-Repository ב-Vercel, Framework Preset: **Other**, ללא Build Command ו-Output Directory.
+ההגדרות נמצאות ב-`vercel.json`: Framework **Other**, Build Command `node scripts/build.js`, Output Directory `dist`. רק `dist/` מתפרסם (בלי `docs/`, `scripts/` ו-README).
 כל הנתיבים בקוד יחסיים לשורש האתר, כך שחיבור הדומיין `royal-enfield-israel.co.il` בהמשך לא דורש שינוי קוד – רק הוספת הדומיין בהגדרות הפרויקט ב-Vercel ועדכון DNS (בשלב מאוחר יותר, אחרי אישור האתר).
 
 ## נגישות

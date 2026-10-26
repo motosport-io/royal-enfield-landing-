@@ -514,6 +514,46 @@ abbr[title] { text-decoration: underline dotted; cursor: help; }
 .lead__done { margin: 0; text-align: center; font-size: 16px; color: var(--gold-light); }
 .lead__done:empty { display: none; }
 
+/* ---------- Gallery (below the main area, only when images exist) ---------- */
+.gallery {
+  padding: 24px var(--gutter) 32px;
+  border-top: 3px solid var(--gold);
+}
+.gallery__title {
+  margin: 0 0 14px;
+  font-family: var(--font-display);
+  font-size: 40px;
+  line-height: 1.1;
+  color: var(--navy);
+}
+.gallery__viewport { max-width: 1200px; margin: 0 auto; }
+.gallery__slides { margin: 0; }
+.gallery__slide img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  max-height: 70vh;
+  margin: 0 auto;
+  border: 3px solid var(--navy);
+}
+.gallery__controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 12px;
+}
+.gallery__btn {
+  width: 48px; height: 48px;
+  border: 2px solid var(--navy);
+  background: var(--white);
+  color: var(--navy);
+  font-size: 22px;
+  cursor: pointer;
+}
+.gallery__count { margin: 0; min-width: 9em; text-align: center; font-weight: 700; color: var(--navy); }
+
 /* ---------- Footer ---------- */
 .footer {
   display: flex;

@@ -1,6 +1,4 @@
-# Internal files – not published with the site
+# Internal files – not uploaded to Vercel (the build publishes dist/ only)
 docs/
-scripts/
 README.md
 serve.json
-assets/images/README.md

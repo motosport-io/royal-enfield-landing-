@@ -548,6 +548,56 @@
     });
   }
 
+  // ---- Gallery (shown only when assets/images/gallery/ has images) ---------------
+  // gallery.json is written by scripts/build.js from the folder contents. No autoplay:
+  // the visitor moves between pictures with the buttons.
+  function galleryAlt(file, n) {
+    var id = file.replace(/\.[a-z0-9]+$/i, '').toLowerCase();
+    var match = null;
+    MODELS.forEach(function (m) {
+      if (id.indexOf(m.id) === 0 && (!match || m.id.length > match.id.length)) match = m;
+    });
+    return 'Royal Enfield' + (match ? ' ' + match.name : '') + ' – תמונת אווירה ' + n;
+  }
+
+  function setupGallery() {
+    if (!window.fetch) return;
+    fetch('/assets/data/gallery.json', { cache: 'no-cache' })
+      .then(function (r) { return r.ok ? r.json() : []; })
+      .then(function (items) {
+        items = (items || []).filter(function (it) { return it && it.src; });
+        if (!items.length) return;
+        var list = $('gallery-slides');
+        var slides = items.map(function (it, i) {
+          var li = el('div', 'gallery__slide');
+          li.setAttribute('role', 'group');
+          li.setAttribute('aria-roledescription', 'שקופית');
+          li.setAttribute('aria-label', (i + 1) + ' מתוך ' + items.length);
+          var img = el('img');
+          img.alt = galleryAlt(it.file || it.src.split('/').pop(), i + 1);
+          img.decoding = 'async';
+          img.loading = i === 0 ? 'eager' : 'lazy';
+          img.src = it.src;
+          li.appendChild(img);
+          li.hidden = i !== 0;
+          list.appendChild(li);
+          return li;
+        });
+        var index = 0;
+        function show(i) {
+          index = (i + slides.length) % slides.length;
+          slides.forEach(function (s, k) { s.hidden = k !== index; });
+          $('gallery-count').textContent = 'תמונה ' + (index + 1) + ' מתוך ' + slides.length;
+        }
+        $('gallery-prev').addEventListener('click', function () { show(index - 1); });
+        $('gallery-next').addEventListener('click', function () { show(index + 1); });
+        if (slides.length < 2) document.querySelector('.gallery__controls').hidden = true;
+        show(0);
+        $('gallery').hidden = false;
+      })
+      .catch(function () { /* no gallery list: keep the section hidden */ });
+  }
+
   // ---- Init -------------------------------------------------------------------------
   if (!MODELS.length) return;
   buildModelList();
@@ -556,6 +606,7 @@
   setupCookies();
   setupStickyCta();
   setupFocusClearance();
+  setupGallery();
 
   var fromHash = location.hash.slice(1);
   MODELS.forEach(function (m, i) { if (m.id === fromHash) state.model = i; });

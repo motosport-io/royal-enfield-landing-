@@ -43,7 +43,8 @@
     <a class="topbar__phone js-phone" href="tel:0732799258" dir="ltr" aria-label="חיוג לתיאום רכיבת מבחן 073-2799258">073-2799258</a>
   </header>
 
-  <main class="layout">
+  <main>
+  <div class="layout">
 
     <!-- Right: model list -->
     <nav class="models" aria-labelledby="models-heading">
@@ -155,6 +156,20 @@
           <button type="submit" class="lead__submit" aria-describedby="submit-note">שלח <span aria-hidden="true">&laquo;</span></button>
           <p class="lead__done" id="form-done" role="status"></p>
         </form>
+      </div>
+    </section>
+  </div>
+
+    <!-- Gallery: stays hidden until images exist in assets/images/gallery/ (listed at build time in gallery.json) -->
+    <section class="gallery" id="gallery" aria-labelledby="gallery-heading" aria-roledescription="קרוסלה" hidden>
+      <h2 class="gallery__title" id="gallery-heading">גלריה</h2>
+      <div class="gallery__viewport">
+        <div class="gallery__slides" id="gallery-slides"></div>
+      </div>
+      <div class="gallery__controls">
+        <button type="button" class="gallery__btn" id="gallery-prev" aria-controls="gallery-slides" aria-label="התמונה הקודמת"><span aria-hidden="true">&#10095;</span></button>
+        <p class="gallery__count" id="gallery-count" aria-live="polite"></p>
+        <button type="button" class="gallery__btn" id="gallery-next" aria-controls="gallery-slides" aria-label="התמונה הבאה"><span aria-hidden="true">&#10094;</span></button>
       </div>
     </section>
   </main>
