@@ -660,6 +660,8 @@ abbr[title] { text-decoration: underline dotted; cursor: help; }
     align-items: center;
   }
   .stage__options { align-self: start; }
+  /* a bike photo with no trim/color selector uses the full width, centered */
+  .stage__body:has(#stage-img:not([hidden])):not(:has(.stage__options > :not([hidden]))) { grid-template-columns: 1fr; }
   .colors__list { flex-direction: column; }
   .pager__dots { display: flex; }
   .phrases {

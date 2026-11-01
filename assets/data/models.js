@@ -62,7 +62,7 @@ window.RE_MODELS = [
     video: '',
     thumb: '',
     trims: [
-      { name: 'Rave Red', price: 32347, colors: [] }
+      { name: 'Rave Red', price: 32347, image: 'assets/images/models/classic-350-goan/rave-red/CLASSIC%20350%20RED%20RAVE.png', colors: [] }
     ]
   },
   {
