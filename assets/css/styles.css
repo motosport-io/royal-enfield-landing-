@@ -725,10 +725,10 @@ abbr[title] { text-decoration: underline dotted; cursor: help; }
     align-items: center;
   }
   .stage__options { align-self: start; }
-  /* a bike photo with no trim/color selector uses the full width, centered */
-  .stage__body:has(#stage-img:not([hidden])):not(:has(.stage__options > :not([hidden]))) { grid-template-columns: 1fr; }
-  /* beside a trim/color selector the photo stays inside its own column */
-  .stage__body:has(.stage__options > :not([hidden])) .stage__bike img { width: 100%; margin-inline: 0; }
+  /* with a bike photo: one column (trim/color selectors in a row above it), so every
+     photo gets the same full-width size whether or not the model has selectors */
+  .stage__body:has(#stage-img:not([hidden])) { grid-template-columns: 1fr; }
+  .stage__body:has(#stage-img:not([hidden])) .colors__list { flex-direction: row; }
   .colors__list { flex-direction: column; }
   .pager__dots { display: flex; }
   .phrases {

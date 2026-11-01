@@ -148,7 +148,13 @@ window.RE_MODELS = [
     video: '',
     thumb: '',
     trims: [
-      { name: '', price: 49347, colors: [] }
+      { name: '', price: 49347, colors: [
+        // swatch colors sampled from each photo (tank + accent)
+        { name: 'Wild Honey', swatch: ['#c7aa00', '#001235'], image: 'assets/images/models/bear-650/wild-honey/BEAR%20650%20WildHoney.png' },
+        { name: 'Two Four Nine', swatch: ['#b5aea4', '#103e36'], image: 'assets/images/models/bear-650/two-four-nine/BEAR%20650%20Two%20four%20Nine.png' },
+        { name: 'Boardwalk White', swatch: ['#cacfd2', '#d65c2f'], image: 'assets/images/models/bear-650/boardwalk-white/BEAR%20650%20Boardwalk%20White.png' },
+        { name: 'Golden Shadow', swatch: ['#020202', '#b29108'], image: 'assets/images/models/bear-650/golden-shadow/BEAR%20650%20GOLDEN%20SHADOW.png' }
+      ] }
     ]
   }
 ];
