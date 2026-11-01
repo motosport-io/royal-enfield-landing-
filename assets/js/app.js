@@ -324,6 +324,7 @@
     var fields = {
       name: $('f-name'),
       phone: $('f-phone'),
+      city: $('f-city'),
       email: $('f-email'),
       privacy: $('f-privacy')
     };
@@ -342,6 +343,7 @@
       if (name.length < 2) errors.push([fields.name, 'נא למלא שם מלא (לפחות 2 תווים).']);
       if (!fields.phone.value.trim()) errors.push([fields.phone, 'נא למלא מספר טלפון.']);
       else if (!normalizePhone(fields.phone.value)) errors.push([fields.phone, 'מספר הטלפון אינו תקין. יש להקליד 9 או 10 ספרות, לדוגמה 050-1234567.']);
+      if (!fields.city.value.trim()) errors.push([fields.city, 'יש להזין עיר מגורים']);
       if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errors.push([fields.email, 'כתובת הדוא"ל אינה תקינה. לדוגמה: name@example.com. אפשר גם להשאיר את השדה ריק.']);
       if (!fields.privacy.checked) errors.push([fields.privacy, 'יש לאשר שקראת את מדיניות הפרטיות כדי לשלוח את הפנייה.']);
       return errors;
@@ -383,7 +385,8 @@
       var lines = [
         'שלום, אשמח לתאם רכיבת מבחן / לקבל פרטים על Royal Enfield',
         'שם: ' + fields.name.value.trim(),
-        'טלפון: ' + normalizePhone(fields.phone.value)
+        'טלפון: ' + normalizePhone(fields.phone.value),
+        'עיר מגורים: ' + fields.city.value.trim()
       ];
       if (email) lines.push('דוא"ל: ' + email);
       lines.push('דגם: ' + c.model.name);
