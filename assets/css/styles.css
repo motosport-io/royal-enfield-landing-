@@ -29,6 +29,10 @@
   --blotch-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='900' preserveAspectRatio='none'%3E%3Cfilter id='b'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.006' numOctaves='5' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 .03 0 0 0 0 .08 0 0 0 .9 -.3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23b)'/%3E%3C/svg%3E");
 }
 
+/* Light-only design: tells browsers not to apply automatic "force dark" recoloring
+   (e.g. Samsung Internet dark mode, Chrome auto dark), which turned the cream background dark brown */
+:root { color-scheme: only light; }
+
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; background: var(--cream); }
 /* keep focused elements clear of the mobile sticky bar */
@@ -104,6 +108,7 @@ abbr[title] { text-decoration: underline dotted; cursor: help; }
 .cookie__text { flex: 1 1 320px; margin: 0; max-width: 75ch; }
 .cookie__text a { color: var(--link-on-navy); }
 .cookie__actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.cookie__text--short, .cookie__label-short { display: none; }
 
 /* ---------- Mobile top bar ---------- */
 .topbar {
@@ -148,6 +153,7 @@ abbr[title] { text-decoration: underline dotted; cursor: help; }
   scrollbar-width: thin;
 }
 .models__item { flex: none; scroll-snap-align: start; }
+.models__picker { display: none; } /* phones only, see the mobile block below */
 .model-btn {
   display: flex;
   flex-direction: column;
@@ -653,6 +659,61 @@ abbr[title] { text-decoration: underline dotted; cursor: help; }
   body, .topbar, .lead__panel, .phrases, .legal-header { background-image: none !important; }
   .wa-float { border: 2px solid ButtonText; }
   .wa-float svg { fill: ButtonText; }
+}
+
+/* ---------- Phones: compact model dropdown and compact cookie banner ---------- */
+@media (max-width: 767px) {
+  .models__list { display: none; }
+  .models__picker {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 12px;
+    padding: 8px var(--gutter);
+  }
+  .models__picker-label {
+    flex: none;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 26px;
+    line-height: 1.1;
+    color: var(--navy);
+  }
+  .models__picker-select {
+    flex: 1 1 160px;
+    min-width: 0;
+    min-height: 44px;
+    padding: 6px 12px;
+    border: 2px solid var(--gold);
+    border-radius: 0;
+    background-color: var(--white);
+    color: var(--navy);
+    font-family: var(--font-model);
+    font-weight: 500;
+    font-size: 18px;
+  }
+
+  .cookie {
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 30; /* above the sticky CTA */
+    gap: 6px 12px;
+    padding: 8px 12px calc(10px + env(safe-area-inset-bottom));
+    border-bottom: 0;
+    border-top: 3px solid var(--gold);
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  .cookie__title { font-size: 15px; }
+  .cookie__text--full, .cookie__label-full { display: none; }
+  .cookie__text--short { display: block; flex: 1 1 100%; }
+  .cookie__text--short a { white-space: nowrap; }
+  .cookie__label-short { display: inline; }
+  .cookie__actions { flex: 1 1 100%; gap: 8px; }
+  .cookie__actions .btn { flex: 1 1 130px; padding: 6px 10px; font-size: 15px; }
+  /* keep the WhatsApp button above the banner while it is open */
+  .wa-float { bottom: max(calc(92px + env(safe-area-inset-bottom)), calc(var(--cookie-h, 0px) + 12px)); }
 }
 
 /* ---------- Tablet: wider stage, options beside the bike ---------- */

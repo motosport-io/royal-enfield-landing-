@@ -108,6 +108,7 @@
       opt.value = i;
       opt.lang = 'en';
       select.appendChild(opt);
+      $('model-picker').appendChild(opt.cloneNode(true));
 
       // Dots repeat the model list for mouse/touch users; keyboard and screen-reader users
       // get the same function from the model list, so the dots stay out of the Tab order.
@@ -121,6 +122,7 @@
     });
 
     select.addEventListener('change', function () { selectModel(Number(select.value), false); });
+    $('model-picker').addEventListener('change', function () { selectModel(Number(this.value), true); });
     $('pager-prev').addEventListener('click', function () { step(-1); });
     $('pager-next').addEventListener('click', function () { step(1); });
   }
@@ -185,6 +187,7 @@
       d.setAttribute('aria-pressed', i === state.model ? 'true' : 'false');
     });
     $('f-model').value = state.model;
+    $('model-picker').value = state.model;
 
     renderTrim();
   }
@@ -484,6 +487,13 @@
       back.focus();
       delete $('cookie-settings').dataset.opened;
     }
+    // Phones show the banner fixed at the bottom; its height lifts the WhatsApp button above it
+    if ('ResizeObserver' in window) {
+      new ResizeObserver(function () {
+        var fixed = getComputedStyle(banner).position === 'fixed';
+        document.documentElement.style.setProperty('--cookie-h', (fixed ? banner.offsetHeight : 0) + 'px');
+      }).observe(banner);
+    }
     $('cookie-accept').addEventListener('click', function () { close('granted', 'העוגיות שאינן הכרחיות אושרו.'); });
     $('cookie-decline').addEventListener('click', function () { close('denied', 'העוגיות שאינן הכרחיות נדחו.'); });
     function openSettings() {
@@ -530,7 +540,7 @@
 
   // ---- Keep the focused element clear of the fixed bars (sticky CTA, WhatsApp button)
   function setupFocusClearance() {
-    var fixed = [$('sticky-cta'), document.querySelector('.wa-float')];
+    var fixed = [$('sticky-cta'), document.querySelector('.wa-float'), $('cookie-banner')];
     document.addEventListener('focusin', function (e) {
       var target = e.target;
       if (!target.getBoundingClientRect || fixed.some(function (f) { return f && f.contains(target); })) return;

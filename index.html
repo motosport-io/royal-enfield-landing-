@@ -6,6 +6,8 @@
   <title>Royal Enfield ישראל | ההרפתקה הבאה שלך מתחילה כאן</title>
   <meta name="description" content="Royal Enfield ישראל – ד.ל.ב מוטוספורט, היבואן הרשמי. בחרו דגם, רמת גימור וצבע ותאמו רכיבת מבחן בוואטסאפ.">
   <meta name="theme-color" content="#102b46">
+  <!-- light-only design: stops browser "force dark" modes from darkening the cream background -->
+  <meta name="color-scheme" content="only light">
   <meta name="format-detection" content="telephone=no">
 
   <meta property="og:type" content="website">
@@ -30,10 +32,12 @@
   <!-- Cookie consent: not modal, does not take focus. Measurement/marketing tags load only after "אישור" -->
   <section class="cookie" id="cookie-banner" aria-labelledby="cookie-title" hidden>
     <h2 class="cookie__title" id="cookie-title">שימוש בעוגיות</h2>
-    <p class="cookie__text">נשמח להשתמש בעוגיות שאינן הכרחיות – למדידה, לסטטיסטיקה ולשיווק (באמצעות Google Tag Manager) – כדי לשפר את האתר. הן יופעלו רק אם תאשרו, ואפשר לשנות את הבחירה בכל עת דרך "הגדרות עוגיות" בתחתית העמוד. פרטים נוספים ב<a href="/privacy">מדיניות הפרטיות</a>.</p>
+    <p class="cookie__text cookie__text--full">נשמח להשתמש בעוגיות שאינן הכרחיות – למדידה, לסטטיסטיקה ולשיווק (באמצעות Google Tag Manager) – כדי לשפר את האתר. הן יופעלו רק אם תאשרו, ואפשר לשנות את הבחירה בכל עת דרך "הגדרות עוגיות" בתחתית העמוד. פרטים נוספים ב<a href="/privacy">מדיניות הפרטיות</a>.</p>
+    <!-- Short version shown on phones instead of the full text above -->
+    <p class="cookie__text cookie__text--short">עוגיות שאינן הכרחיות (מדידה ושיווק) יופעלו רק אם תאשרו. אפשר לשנות בכל עת ב"הגדרות עוגיות" בתחתית העמוד. <a href="/privacy">מדיניות הפרטיות</a></p>
     <div class="cookie__actions">
-      <button type="button" class="btn btn--gold" id="cookie-accept">אישור עוגיות שאינן הכרחיות</button>
-      <button type="button" class="btn btn--outline" id="cookie-decline">דחיית עוגיות שאינן הכרחיות</button>
+      <button type="button" class="btn btn--gold" id="cookie-accept"><span class="cookie__label-full">אישור עוגיות שאינן הכרחיות</span><span class="cookie__label-short">אישור עוגיות</span></button>
+      <button type="button" class="btn btn--outline" id="cookie-decline"><span class="cookie__label-full">דחיית עוגיות שאינן הכרחיות</span><span class="cookie__label-short">דחיית עוגיות</span></button>
     </div>
   </section>
 
@@ -49,6 +53,11 @@
     <!-- Right: model list -->
     <nav class="models" aria-labelledby="models-heading">
       <h2 class="sr-only" id="models-heading" tabindex="-1">בחירת דגם</h2>
+      <!-- Phones: compact dropdown instead of the horizontal model strip -->
+      <div class="models__picker">
+        <label class="models__picker-label" for="model-picker">בחרו את הרויאל שלכם</label>
+        <select class="models__picker-select" id="model-picker" dir="ltr"></select>
+      </div>
       <ul class="models__list" id="model-list"></ul>
     </nav>
 
