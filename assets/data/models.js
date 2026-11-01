@@ -42,7 +42,7 @@ window.RE_MODELS = [
     video: '',
     thumb: '',
     trims: [
-      { name: '', price: 28338, colors: [] }
+      { name: '', price: 28347, colors: [] }
     ]
   },
   {
@@ -52,7 +52,7 @@ window.RE_MODELS = [
     video: '',
     thumb: '',
     trims: [
-      { name: '', price: 31338, colors: [] }
+      { name: '', price: 31347, colors: [] }
     ]
   },
   {
@@ -62,7 +62,7 @@ window.RE_MODELS = [
     video: '',
     thumb: '',
     trims: [
-      { name: 'Rave Red', price: 32338, colors: [] }
+      { name: 'Rave Red', price: 32347, colors: [] }
     ]
   },
   {
@@ -72,10 +72,20 @@ window.RE_MODELS = [
     video: '',
     thumb: '',
     trims: [
-      { name: 'Fireball', price: 27338, colors: [] },
-      { name: 'Stellar', price: 28338, colors: [] },
-      { name: 'Aurora', price: 29338, colors: [] },
-      { name: 'Supernova', price: 29338, colors: [] }
+      { name: 'Fireball', price: 27347, colors: [] },
+      { name: 'Stellar', price: 28347, colors: [] },
+      { name: 'Aurora', price: 29347, colors: [] },
+      { name: 'Supernova', price: 29347, colors: [] }
+    ]
+  },
+  {
+    id: 'bullet-350',
+    name: 'Bullet 350',
+    phrases: [],
+    video: '',
+    thumb: '',
+    trims: [
+      { name: '', price: 31347, colors: [] }
     ]
   },
   {
@@ -85,7 +95,7 @@ window.RE_MODELS = [
     video: '',
     thumb: '',
     trims: [
-      { name: '', price: 35338, colors: [] }
+      { name: '', price: 35347, colors: [] }
     ]
   },
   {
@@ -95,8 +105,8 @@ window.RE_MODELS = [
     video: '',
     thumb: '',
     trims: [
-      { name: '', price: 37338, colors: [] },
-      { name: 'Mana Black Rally', price: 40338, colors: [] }
+      { name: '', price: 37347, colors: [] },
+      { name: 'Mana Black Rally', price: 40347, colors: [] }
     ]
   },
   {
@@ -106,9 +116,9 @@ window.RE_MODELS = [
     video: '',
     thumb: '',
     trims: [
-      { name: 'Astral', price: 46338, colors: [] },
-      { name: 'Interstellar', price: 47338, colors: [] },
-      { name: 'Celestial', price: 48338, colors: [] }
+      { name: 'Astral', price: 46347, colors: [] },
+      { name: 'Interstellar', price: 47347, colors: [] },
+      { name: 'Celestial', price: 48347, colors: [] }
     ]
   },
   {
@@ -118,7 +128,7 @@ window.RE_MODELS = [
     video: '',
     thumb: '',
     trims: [
-      { name: '', price: 48338, colors: [] }
+      { name: '', price: 48347, colors: [] }
     ]
   },
   {
@@ -128,7 +138,7 @@ window.RE_MODELS = [
     video: '',
     thumb: '',
     trims: [
-      { name: '', price: 48338, colors: [] }
+      { name: '', price: 48347, colors: [] }
     ]
   },
   {
@@ -138,7 +148,7 @@ window.RE_MODELS = [
     video: '',
     thumb: '',
     trims: [
-      { name: '', price: 49338, colors: [] }
+      { name: '', price: 49347, colors: [] }
     ]
   }
 ];
