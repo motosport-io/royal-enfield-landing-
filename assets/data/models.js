@@ -42,7 +42,11 @@ window.RE_MODELS = [
     video: '',
     thumb: '',
     trims: [
-      { name: '', price: 28347, colors: [] }
+      { name: '', price: 28347, colors: [
+        { name: 'Rio White', swatch: ['#efeeeb', '#0db74f'], image: 'assets/images/models/hunter-350/rio-white/HUNTER%20350%20RioWhite.png' },
+        { name: 'Graphite Grey', swatch: ['#17181a', '#a7b33e'], image: 'assets/images/models/hunter-350/graphite-grey/HUNTER%20350%20Graphite%20Grey.png' },
+        { name: 'London Red', swatch: ['#921112', '#121214'], image: 'assets/images/models/hunter-350/london-red/HUNTER%20350%20LondonRed.png' }
+      ] }
     ]
   },
   {
@@ -52,7 +56,12 @@ window.RE_MODELS = [
     video: '',
     thumb: '',
     trims: [
-      { name: '', price: 31347, colors: [] }
+      { name: '', price: 31347, colors: [
+        { name: 'Emerald', swatch: ['#193134', '#111718'], image: 'assets/images/models/classic-350/emerald/classic%20350%20emerald.png' },
+        { name: 'Jodhpur Blue', swatch: ['#015882'], image: 'assets/images/models/classic-350/jodhpur-blue/CALSSIC%20350%20jodhpur-blue.png' },
+        { name: 'Stealth Black', swatch: ['#1b1b1b'], image: 'assets/images/models/classic-350/stealth-black/CLASSIC%20350%20Stealth%20Black.png' },
+        { name: 'Medallion Bronze', swatch: ['#583a29', '#eeebe5'], image: 'assets/images/models/classic-350/medallion-bronze/CLASSIC%20350%20medallion-bronze.png' }
+      ] }
     ]
   },
   {
@@ -85,7 +94,9 @@ window.RE_MODELS = [
     video: '',
     thumb: '',
     trims: [
-      { name: '', price: 31347, colors: [] }
+      { name: '', price: 31347, colors: [
+        { name: 'Black Gold', swatch: ['#0b0e10', '#ea9d3b'], image: 'assets/images/models/bullet-350/black-gold/BULLET%20350%20BLACK%20GOLD.png' }
+      ] }
     ]
   },
   {
@@ -95,7 +106,12 @@ window.RE_MODELS = [
     video: '',
     thumb: '',
     trims: [
-      { name: '', price: 35347, colors: [] }
+      { name: '', price: 35347, colors: [
+        { name: 'Apex Red Black', swatch: ['#be0b0e', '#111214'], image: 'assets/images/models/guerrilla-450/apex-red-black/GUERRILLA%20450%20APEX%20RED%20.png' },
+        { name: 'Shadow Ash', swatch: ['#555857'], image: 'assets/images/models/guerrilla-450/shadow-ash/GUERRILLA%20450%20Shadow%20Ash.png' },
+        { name: 'Twilight Blue', swatch: ['#1e3b61', '#0f1219'], image: 'assets/images/models/guerrilla-450/twilight-blue/GUERRILLA%20450%20Twilight%20Blue.png' },
+        { name: 'Smoke Silver', swatch: ['#abadaf'], image: 'assets/images/models/guerrilla-450/smoke-silver/GUERRILLA%20450%20Smoke%20SILVER.png' }
+      ] }
     ]
   },
   {
@@ -105,8 +121,14 @@ window.RE_MODELS = [
     video: '',
     thumb: '',
     trims: [
-      { name: '', price: 37347, colors: [] },
-      { name: 'Mana Black Rally', price: 40347, colors: [] }
+      { name: '', price: 37347, colors: [
+        { name: 'Kamet White', swatch: ['#dddfdf', '#767a7b'], image: 'assets/images/models/himalayan-450/kamet-white/Himalayan%20450%20Kamet%20white.png' },
+        { name: 'Hanle Black', swatch: ['#131414', '#805026'], image: 'assets/images/models/himalayan-450/hanle-black/Himalayan%20450%20hanle-black.png' },
+        { name: 'Kaza Brown', swatch: ['#cdc9c0'], image: 'assets/images/models/himalayan-450/kaza-brown/Himalayan%20450%20Kaza%20brown.png' }
+      ] },
+      { name: 'Mana Black Rally', price: 40347, colors: [
+        { name: 'Mana Black', swatch: ['#191a1c', '#656a70'], image: 'assets/images/models/himalayan-450/mana-black/Himalayan%20450%20mana-black.png' }
+      ] }
     ]
   },
   {
@@ -128,7 +150,9 @@ window.RE_MODELS = [
     video: '',
     thumb: '',
     trims: [
-      { name: '', price: 48347, colors: [] }
+      { name: '', price: 48347, colors: [
+        { name: 'Cannon Black', swatch: ['#111214', '#967d4f'], image: 'assets/images/models/bullet-650/cannon-black/BULLET%20650%20CANNON%20BLACK.png' }
+      ] }
     ]
   },
   {
@@ -138,7 +162,11 @@ window.RE_MODELS = [
     video: '',
     thumb: '',
     trims: [
-      { name: '', price: 48347, colors: [] }
+      { name: '', price: 48347, colors: [
+        { name: 'Black Chrome', swatch: ['#0d0e10', '#d0d5d8'], image: 'assets/images/models/classic-650/black-chrome/CLASSIC%20650%20Black%20Chrome.png' },
+        { name: 'Vallam Red', swatch: ['#6e1f31', '#e3e5e9'], image: 'assets/images/models/classic-650/vallam-red/CLASSIC%20650%20Vallam%20Red.png' },
+        { name: 'Bruntingthorpe Blue', swatch: ['#3c548a', '#e8f0f8'], image: 'assets/images/models/classic-650/bruntingthorpe-blue/CLASSIC%20650%20Bruntingthorpe%20Blue.png' }
+      ] }
     ]
   },
   {
