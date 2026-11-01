@@ -192,10 +192,11 @@ abbr[title] { text-decoration: underline dotted; cursor: help; }
 
 /* ---------- Stage ---------- */
 .stage {
+  --stage-pad-x: var(--gutter); /* side padding; model photos may extend into it */
   display: flex;
   flex-direction: column;
   gap: 14px;
-  padding: 18px var(--gutter) 22px;
+  padding: 18px var(--stage-pad-x) 22px;
   min-width: 0;
 }
 .stage__head { text-align: start; }
@@ -326,10 +327,13 @@ abbr[title] { text-decoration: underline dotted; cursor: help; }
 }
 .stage__bike img {
   display: block;
-  width: 100%;
-  max-width: 900px;
+  /* shared size for every model photo: full stage width including its side padding,
+     scaled to fit (never cropped or stretched) */
+  width: calc(100% + 2 * var(--stage-pad-x));
+  max-width: none;
+  margin-inline: calc(-1 * var(--stage-pad-x));
   height: auto;
-  max-height: 58vh;
+  max-height: 70vh;
   object-fit: contain;
 }
 .stage__placeholder {
@@ -662,6 +666,8 @@ abbr[title] { text-decoration: underline dotted; cursor: help; }
   .stage__options { align-self: start; }
   /* a bike photo with no trim/color selector uses the full width, centered */
   .stage__body:has(#stage-img:not([hidden])):not(:has(.stage__options > :not([hidden]))) { grid-template-columns: 1fr; }
+  /* beside a trim/color selector the photo stays inside its own column */
+  .stage__body:has(.stage__options > :not([hidden])) .stage__bike img { width: 100%; margin-inline: 0; }
   .colors__list { flex-direction: column; }
   .pager__dots { display: flex; }
   .phrases {
@@ -699,11 +705,12 @@ abbr[title] { text-decoration: underline dotted; cursor: help; }
   .model-btn[aria-pressed="true"] { border-inline-start-color: var(--navy); }
   .model-btn img, .model-btn__ph { height: 78px; }
   .stage {
-    padding: 24px 32px 16px;
+    --stage-pad-x: 32px;
+    padding: 24px var(--stage-pad-x) 16px;
     gap: 10px;
   }
   .stage__bike { min-height: 300px; }
-  .stage__bike img { max-height: 52vh; }
+  .stage__bike img { max-height: 70vh; }
   .lead { padding: 28px 20px 100px 30px; } /* bottom room: the floating WhatsApp button sits in this corner */
   .lead__panel { width: 100%; }
   .footer {
