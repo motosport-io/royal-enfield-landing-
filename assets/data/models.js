@@ -100,16 +100,6 @@ window.RE_MODELS = [
     ]
   },
   {
-    id: 'continental-gt-650',
-    name: 'Continental GT 650',
-    phrases: ['השראה מעולם הקפה רייסר', 'תנוחת רכיבה ספורטיבית', 'עיצוב רטרו עם אופי חד'],
-    video: '',
-    thumb: '',
-    trims: [
-      { name: '', price: 46338, colors: [] }
-    ]
-  },
-  {
     id: 'super-meteor-650',
     name: 'Super Meteor 650',
     phrases: ['קרוזר שמזמין לצאת לדרך', 'מנוע טווין 650 עם אופי חלק', 'נוחות וסטייל למרחקים'],
@@ -125,16 +115,6 @@ window.RE_MODELS = [
     id: 'bullet-650',
     name: 'Bullet 650',
     phrases: ['המורשת של Bullet ממשיכה', 'עיצוב מסורתי עם מנוע טווין 650', 'נוכחות קלאסית בכל רכיבה'],
-    video: '',
-    thumb: '',
-    trims: [
-      { name: '', price: 48338, colors: [] }
-    ]
-  },
-  {
-    id: 'shotgun-650',
-    name: 'Shotgun 650',
-    phrases: ['עיצוב נועז שלא מתנצל', 'אופי אישי עם אינסוף סטייל', 'קרוזר עם גישה אחרת'],
     video: '',
     thumb: '',
     trims: [
