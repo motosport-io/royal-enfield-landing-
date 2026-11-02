@@ -192,6 +192,33 @@
     $('model-picker').value = state.model;
 
     renderTrim();
+    preloadModelImages(model);
+  }
+
+  // After the visible photo has loaded, fetch the other photos of the same model (all its
+  // trims and colors) in the background, so switching color is instant. Active model only.
+  var preloaded = {};
+  function preloadModelImages(model) {
+    var srcs = [];
+    model.trims.forEach(function (t) {
+      if (t.image) srcs.push(t.image);
+      (t.colors || []).forEach(function (c) { if (c.image) srcs.push(c.image); });
+    });
+    function run() {
+      if (MODELS[state.model] !== model) return; // visitor already moved on
+      srcs.forEach(function (src) {
+        if (preloaded[src]) return;
+        preloaded[src] = true;
+        var im = new Image();
+        im.decoding = 'async';
+        im.src = src;
+      });
+    }
+    var img = $('stage-img');
+    if (img && !img.hidden && !img.complete) {
+      img.addEventListener('load', run, { once: true });
+      img.addEventListener('error', run, { once: true });
+    } else setTimeout(run, 0);
   }
 
   function renderTrim() {
