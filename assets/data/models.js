@@ -81,10 +81,20 @@ window.RE_MODELS = [
     video: '',
     thumb: '',
     trims: [
-      { name: 'Fireball', price: 27347, colors: [] },
-      { name: 'Stellar', price: 28347, colors: [] },
-      { name: 'Aurora', price: 29347, colors: [] },
-      { name: 'Supernova', price: 29347, colors: [] }
+      { name: 'Fireball', price: 27347, colors: [
+        { name: 'Fireball Red', swatch: ['#a21e1e'], image: 'assets/images/models/meteor-350/fireball-red/Meteor%20350%20fireball-red.png' },
+        { name: 'Fireball Orange', swatch: ['#db9029'], image: 'assets/images/models/meteor-350/fireball-orange/Meteor%20350%20fireball-orange.png' }
+      ] },
+      { name: 'Stellar', price: 28347, colors: [
+        { name: 'Stellar Black', swatch: ['#1d1c1c'], image: 'assets/images/models/meteor-350/stellar-black/Meteor%20350%20stellar-black.png' },
+        { name: 'Stellar Grey', swatch: ['#8c8c8a'], image: 'assets/images/models/meteor-350/stellar-grey/Meteor%20350%20stellar-grey.png' }
+      ] },
+      { name: 'Aurora', price: 29347, colors: [
+        { name: 'Aurora Green', swatch: ['#2e5e6f', '#dddbd9'], image: 'assets/images/models/meteor-350/aurora-green/meteor%20350%20aurora-green.png' }
+      ] },
+      { name: 'Supernova', price: 29347, colors: [
+        { name: 'Supernova Black', swatch: ['#131315'], image: 'assets/images/models/meteor-350/supernova-black/Meteor%20350%20supernova-black.png' }
+      ] }
     ]
   },
   {
@@ -138,9 +148,15 @@ window.RE_MODELS = [
     video: '',
     thumb: '',
     trims: [
-      { name: 'Astral', price: 46347, colors: [] },
-      { name: 'Interstellar', price: 47347, colors: [] },
-      { name: 'Celestial', price: 48347, colors: [] }
+      { name: 'Astral', price: 46347, colors: [
+        { name: 'Astral Black', swatch: ['#1b1d1f'], image: 'assets/images/models/super-meteor-650/astral-black/SUPER%20METEOR%20650%20astral-black.png' }
+      ] },
+      { name: 'Interstellar', price: 47347, colors: [
+        { name: 'Interstellar Green', swatch: ['#252c21', '#1b1d1e'], image: 'assets/images/models/super-meteor-650/interstellar-green/SUPER%20METEOR%20650%20interstellar-green.png' }
+      ] },
+      { name: 'Celestial', price: 48347, colors: [
+        { name: 'Celestial Blue', swatch: ['#1f2a3b', '#dadfe0'], image: 'assets/images/models/super-meteor-650/celestial-blue/SUPER%20METEOR%20650%20celestial-blue.png' }
+      ] }
     ]
   },
   {
