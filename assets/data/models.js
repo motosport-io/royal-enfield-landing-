@@ -107,7 +107,7 @@ window.RE_MODELS = [
     thumb: '',
     trims: [
       { name: '', price: 35347, colors: [
-        { name: 'Apex Red Black', swatch: ['#be0b0e', '#111214'], image: 'assets/images/models/guerrilla-450/apex-red-black/GUERRILLA%20450%20APEX%20RED%20.png' },
+        { name: 'Apex Red', swatch: ['#be0b0e', '#111214'], image: 'assets/images/models/guerrilla-450/apex-red-black/GUERRILLA%20450%20APEX%20RED%20.png' },
         { name: 'Shadow Ash', swatch: ['#555857'], image: 'assets/images/models/guerrilla-450/shadow-ash/GUERRILLA%20450%20Shadow%20Ash.png' },
         { name: 'Twilight Blue', swatch: ['#1e3b61', '#0f1219'], image: 'assets/images/models/guerrilla-450/twilight-blue/GUERRILLA%20450%20Twilight%20Blue.png' },
         { name: 'Smoke Silver', swatch: ['#abadaf'], image: 'assets/images/models/guerrilla-450/smoke-silver/GUERRILLA%20450%20Smoke%20SILVER.png' }
@@ -126,7 +126,7 @@ window.RE_MODELS = [
         { name: 'Hanle Black', swatch: ['#131414', '#805026'], image: 'assets/images/models/himalayan-450/hanle-black/Himalayan%20450%20hanle-black.png' },
         { name: 'Kaza Brown', swatch: ['#cdc9c0'], image: 'assets/images/models/himalayan-450/kaza-brown/Himalayan%20450%20Kaza%20brown.png' }
       ] },
-      { name: 'Mana Black Rally', price: 40347, colors: [
+      { name: 'Mana Black', price: 40347, colors: [
         { name: 'Mana Black', swatch: ['#191a1c', '#656a70'], image: 'assets/images/models/himalayan-450/mana-black/Himalayan%20450%20mana-black.png' }
       ] }
     ]
