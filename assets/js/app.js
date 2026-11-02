@@ -56,6 +56,8 @@
       var colors = model.trims[i].colors || [];
       for (var j = 0; j < colors.length; j++) if (colors[j].image) return colors[j].image;
     }
+    // a trim without colors may carry its own image (e.g. Classic 350 Goan)
+    for (var k = 0; k < model.trims.length; k++) if (model.trims[k].image) return model.trims[k].image;
     return '';
   }
 
