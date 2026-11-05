@@ -19,6 +19,9 @@
   function formatPrice(n) { return Number(n).toLocaleString('he-IL') + ' ₪'; }
   function trimLabel(t) { return t.name || STANDARD_TRIM_LABEL; }
   // A color may carry its own `price`; otherwise the trim price applies
+  // "בקרוב" (not in Israel yet) can be set on a model, a trim or a color
+  function isComingSoon(c) { return !!(c.model.comingSoon || c.trim.comingSoon || (c.color && c.color.comingSoon)); }
+  function soonBadge(cls) { return el('span', 'soon-badge' + (cls ? ' ' + cls : ''), 'בקרוב'); }
   function priceOf(trim, color) { return color && color.price ? color.price : trim.price; }
   // Price shown on a trim button: the lowest of its colors, with "החל מ-" when colors differ
   function trimPriceLabel(t) {
@@ -111,11 +114,12 @@
         btn.appendChild(ph);
       }
       btn.appendChild(en(model.name, 'model-btn__name'));
+      if (model.comingSoon) btn.appendChild(soonBadge('soon-badge--corner'));
       btn.addEventListener('click', function () { selectModel(i, true); });
       li.appendChild(btn);
       list.appendChild(li);
 
-      var opt = el('option', null, model.name);
+      var opt = el('option', null, model.name + (model.comingSoon ? ' – בקרוב' : ''));
       opt.value = i;
       opt.lang = 'en';
       select.appendChild(opt);
@@ -270,6 +274,11 @@
     price.appendChild(el('strong', null, formatPrice(priceOf(c.trim, c.color))));
     price.appendChild(document.createTextNode(' '));
     price.appendChild(el('small', null, '(לפני הוצאות רישוי)'));
+    if (isComingSoon(c)) {
+      price.appendChild(document.createTextNode(' '));
+      price.appendChild(soonBadge());
+      price.appendChild(el('span', 'soon-note', 'הדגם בדרך לארץ'));
+    }
 
     // Bike image for the exact trim + color; placeholder until real images are added
     var img = $('stage-img');
@@ -436,6 +445,7 @@
       // trim only when the model has trims to choose from, or a named single trim
       if (c.model.trims.length > 1 || c.trim.name) lines.push('רמת גימור: ' + trimLabel(c.trim));
       if (c.color) lines.push('צבע: ' + c.color.name);
+      if (isComingSoon(c)) lines.push('סטטוס: בקרוב (הדגם בדרך לארץ)');
       lines.push('אישור דיוור שיווקי: ' + ($('f-marketing').checked ? 'כן' : 'לא'));
 
       var url = waUrl(lines.join('\n'));

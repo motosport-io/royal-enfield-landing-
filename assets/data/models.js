@@ -9,6 +9,7 @@
  *   phrases  – exactly three short marketing phrases (shown in the bar under the bike).
  *   video    – optional link to a video (YouTube etc.). Empty = the "לצפייה בסרטון" link is hidden.
  *   thumb    – optional small image for the side list. Empty = the first color image is used.
+ *   comingSoon – optional: true shows a "בקרוב" badge (model not in Israel yet). Also allowed on a trim or a color.
  *   trims    – one or more trims. A model with a single trim shows no trim selector.
  *     name   – trim name as it appears in the price list. Empty ('') = the standard version.
  *     price  – price in ₪, before licensing costs (number, no commas).
@@ -70,9 +71,12 @@ window.RE_MODELS = [
     name: 'Classic 350 Goan',
     phrases: ['סגנון בובר עם נוכחות ייחודית', 'מראה צבעוני ונועז', 'קלאסיקה עם טוויסט חופשי'],
     video: '',
-    thumb: 'assets/images/models/classic-350-goan/rave-red/CLASSIC%20350%20RED%20RAVE.thumb.webp',
+    // Purple Haze is on its way to Israel: shown with a "בקרוב" badge.
+    // Photo goes in assets/images/models/classic-350-goan/purple-haze/ (then set thumb + image).
+    comingSoon: true,
+    thumb: '',
     trims: [
-      { name: 'Rave Red', price: 32347, image: 'assets/images/models/classic-350-goan/rave-red/CLASSIC%20350%20RED%20RAVE.webp', colors: [] }
+      { name: 'Purple Haze', price: 32347, image: '', colors: [] }
     ]
   },
   {
