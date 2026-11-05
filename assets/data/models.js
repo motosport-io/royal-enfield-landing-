@@ -72,11 +72,10 @@ window.RE_MODELS = [
     phrases: ['סגנון בובר עם נוכחות ייחודית', 'מראה צבעוני ונועז', 'קלאסיקה עם טוויסט חופשי'],
     video: '',
     // Purple Haze is on its way to Israel: shown with a "בקרוב" badge.
-    // Photo goes in assets/images/models/classic-350-goan/purple-haze/ (then set thumb + image).
     comingSoon: true,
-    thumb: '',
+    thumb: 'assets/images/models/classic-350-goan/purple-haze/CLASSIC%20350%20PurpleHaze.thumb.webp',
     trims: [
-      { name: 'Purple Haze', price: 32347, image: '', colors: [] }
+      { name: 'Purple Haze', price: 32347, image: 'assets/images/models/classic-350-goan/purple-haze/CLASSIC%20350%20PurpleHaze.webp', colors: [] }
     ]
   },
   {
