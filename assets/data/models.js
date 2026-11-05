@@ -9,6 +9,7 @@
  *   phrases  – exactly three short marketing phrases (shown in the bar under the bike).
  *   video    – optional link to a video (YouTube etc.). Empty = the "לצפייה בסרטון" link is hidden.
  *   thumb    – optional small image for the side list. Empty = the first color image is used.
+ *   comingSoon – optional: true shows a "בקרוב" badge (model not in Israel yet). Also allowed on a trim or a color.
  *   trims    – one or more trims. A model with a single trim shows no trim selector.
  *     name   – trim name as it appears in the price list. Empty ('') = the standard version.
  *     price  – price in ₪, before licensing costs (number, no commas).
@@ -17,6 +18,7 @@
  *       name   – color name in Hebrew (as shown to the customer and sent in WhatsApp).
  *       swatch – one or two hex colors for the color circle, e.g. ['#8a1c1c'] or ['#c0c0c0', '#2b2b2b'].
  *       image  – studio image for this exact trim + color, e.g. 'assets/images/models/meteor-350/stellar-red.webp'.
+ *       price  – optional: price in ₪ for this color only, when it differs from the trim price.
  *
  * Colors and images are intentionally empty: they must come from the importer's official data
  * (https://motosport.co.il/brand/royal-enfield) and were not invented.
@@ -69,9 +71,11 @@ window.RE_MODELS = [
     name: 'Classic 350 Goan',
     phrases: ['סגנון בובר עם נוכחות ייחודית', 'מראה צבעוני ונועז', 'קלאסיקה עם טוויסט חופשי'],
     video: '',
-    thumb: 'assets/images/models/classic-350-goan/rave-red/CLASSIC%20350%20RED%20RAVE.thumb.webp',
+    // Purple Haze is on its way to Israel: shown with a "בקרוב" badge.
+    comingSoon: true,
+    thumb: 'assets/images/models/classic-350-goan/purple-haze/CLASSIC%20350%20PurpleHaze.thumb.webp',
     trims: [
-      { name: 'Rave Red', price: 32347, image: 'assets/images/models/classic-350-goan/rave-red/CLASSIC%20350%20RED%20RAVE.webp', colors: [] }
+      { name: 'Purple Haze', price: 32347, image: 'assets/images/models/classic-350-goan/purple-haze/CLASSIC%20350%20PurpleHaze.webp', colors: [] }
     ]
   },
   {
@@ -132,8 +136,8 @@ window.RE_MODELS = [
     thumb: 'assets/images/models/himalayan-450/kamet-white/Himalayan%20450%20Kamet%20white.thumb.webp',
     trims: [
       { name: '', price: 37347, colors: [
-        { name: 'Kamet White', swatch: ['#dddfdf', '#767a7b'], image: 'assets/images/models/himalayan-450/kamet-white/Himalayan%20450%20Kamet%20white.webp' },
-        { name: 'Hanle Black', swatch: ['#131414', '#805026'], image: 'assets/images/models/himalayan-450/hanle-black/Himalayan%20450%20hanle-black.webp' },
+        { name: 'Kamet White', price: 39347, swatch: ['#dddfdf', '#767a7b'], image: 'assets/images/models/himalayan-450/kamet-white/Himalayan%20450%20Kamet%20white.webp' },
+        { name: 'Hanle Black', price: 39347, swatch: ['#131414', '#805026'], image: 'assets/images/models/himalayan-450/hanle-black/Himalayan%20450%20hanle-black.webp' },
         { name: 'Kaza Brown', swatch: ['#cdc9c0'], image: 'assets/images/models/himalayan-450/kaza-brown/Himalayan%20450%20Kaza%20brown.webp' }
       ] },
       { name: 'Mana Black', price: 40347, colors: [

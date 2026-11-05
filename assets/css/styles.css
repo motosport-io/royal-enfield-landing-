@@ -188,6 +188,21 @@ abbr[title] { text-decoration: underline dotted; cursor: help; }
   font-family: var(--font-model);
   font-size: 24px;
 }
+/* "בקרוב" badge: navy with light gold text (10.4:1) */
+.soon-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--navy);
+  color: var(--gold-light);
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.5;
+  vertical-align: middle;
+}
+.soon-note { display: inline-block; margin-inline-start: 8px; font-size: 15px; font-weight: 700; vertical-align: middle; }
+.model-btn { position: relative; }
+.soon-badge--corner { position: absolute; top: 6px; inset-inline-start: 6px; padding: 1px 8px; font-size: 12px; }
 .model-btn__name {
   font-family: var(--font-model);
   font-weight: 500;

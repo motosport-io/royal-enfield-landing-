@@ -18,6 +18,18 @@
   }
   function formatPrice(n) { return Number(n).toLocaleString('he-IL') + ' ₪'; }
   function trimLabel(t) { return t.name || STANDARD_TRIM_LABEL; }
+  // A color may carry its own `price`; otherwise the trim price applies
+  // "בקרוב" (not in Israel yet) can be set on a model, a trim or a color
+  function isComingSoon(c) { return !!(c.model.comingSoon || c.trim.comingSoon || (c.color && c.color.comingSoon)); }
+  function soonBadge(cls) { return el('span', 'soon-badge' + (cls ? ' ' + cls : ''), 'בקרוב'); }
+  function priceOf(trim, color) { return color && color.price ? color.price : trim.price; }
+  // Price shown on a trim button: the lowest of its colors, with "החל מ-" when colors differ
+  function trimPriceLabel(t) {
+    var prices = (t.colors || []).map(function (c) { return priceOf(t, c); });
+    if (!prices.length) return formatPrice(t.price);
+    var min = Math.min.apply(null, prices);
+    return (Math.max.apply(null, prices) > min ? 'החל מ-' : '') + formatPrice(min);
+  }
   // English names are marked lang="en" so screen readers switch pronunciation
   function en(text, cls) {
     var s = el('span', cls, text);
@@ -102,11 +114,12 @@
         btn.appendChild(ph);
       }
       btn.appendChild(en(model.name, 'model-btn__name'));
+      if (model.comingSoon) btn.appendChild(soonBadge('soon-badge--corner'));
       btn.addEventListener('click', function () { selectModel(i, true); });
       li.appendChild(btn);
       list.appendChild(li);
 
-      var opt = el('option', null, model.name);
+      var opt = el('option', null, model.name + (model.comingSoon ? ' – בקרוב' : ''));
       opt.value = i;
       opt.lang = 'en';
       select.appendChild(opt);
@@ -166,13 +179,13 @@
         state.color = colorIndexFor(t, before);
         renderTrim();
         var c = current();
-        var msg = 'רמת גימור ' + trimLabel(t) + ', מחיר ' + formatPrice(t.price);
+        var msg = 'רמת גימור ' + trimLabel(t) + ', מחיר ' + formatPrice(priceOf(t, c.color));
         if (c.color) msg += ', צבע ' + c.color.name + (before && before.name === c.color.name ? '' : ' (הצבע הוחלף לצבע זמין ברמת גימור זו)');
         announce(msg);
       });
       var box = el('span', 'trim-opt__box');
       box.appendChild(t.name ? en(t.name) : el('span', null, STANDARD_TRIM_LABEL));
-      box.appendChild(el('span', 'trim-opt__price', formatPrice(t.price)));
+      box.appendChild(el('span', 'trim-opt__price', trimPriceLabel(t)));
       label.appendChild(input);
       label.appendChild(box);
       trimList.appendChild(label);
@@ -224,13 +237,6 @@
   function renderTrim() {
     var trim = current().trim;
 
-    var price = $('stage-price');
-    price.textContent = '';
-    price.appendChild(document.createTextNode('מחיר: '));
-    price.appendChild(el('strong', null, formatPrice(trim.price)));
-    price.appendChild(document.createTextNode(' '));
-    price.appendChild(el('small', null, '(לפני הוצאות רישוי)'));
-
     var colorList = $('color-list');
     colorList.textContent = '';
     var colors = trim.colors || [];
@@ -243,9 +249,11 @@
       input.value = i;
       input.checked = i === state.color;
       input.addEventListener('change', function () {
+        var before = priceOf(trim, current().color);
         state.color = i;
         renderColor();
-        announce('צבע ' + col.name);
+        var now = priceOf(trim, col);
+        announce('צבע ' + col.name + (now !== before ? ', מחיר ' + formatPrice(now) : ''));
       });
       label.appendChild(input);
       label.appendChild(swatch(col));
@@ -259,6 +267,18 @@
   function renderColor() {
     var c = current();
     var colors = c.trim.colors || [];
+
+    var price = $('stage-price');
+    price.textContent = '';
+    price.appendChild(document.createTextNode('מחיר: '));
+    price.appendChild(el('strong', null, formatPrice(priceOf(c.trim, c.color))));
+    price.appendChild(document.createTextNode(' '));
+    price.appendChild(el('small', null, '(לפני הוצאות רישוי)'));
+    if (isComingSoon(c)) {
+      price.appendChild(document.createTextNode(' '));
+      price.appendChild(soonBadge());
+      price.appendChild(el('span', 'soon-note', 'הדגם בדרך לארץ'));
+    }
 
     // Bike image for the exact trim + color; placeholder until real images are added
     var img = $('stage-img');
@@ -292,7 +312,7 @@
     state.color = 0;
     renderModel();
     var c = current();
-    announce('נבחר דגם ' + selectionText(c) + ', מחיר ' + formatPrice(c.trim.price));
+    announce('נבחר דגם ' + selectionText(c) + ', מחיר ' + formatPrice(priceOf(c.trim, c.color)));
     if (history.replaceState) history.replaceState(null, '', '#' + MODELS[i].id);
     if (fromList) revealModelButton(i);
   }
@@ -425,6 +445,7 @@
       // trim only when the model has trims to choose from, or a named single trim
       if (c.model.trims.length > 1 || c.trim.name) lines.push('רמת גימור: ' + trimLabel(c.trim));
       if (c.color) lines.push('צבע: ' + c.color.name);
+      if (isComingSoon(c)) lines.push('סטטוס: בקרוב (הדגם בדרך לארץ)');
       lines.push('אישור דיוור שיווקי: ' + ($('f-marketing').checked ? 'כן' : 'לא'));
 
       var url = waUrl(lines.join('\n'));
