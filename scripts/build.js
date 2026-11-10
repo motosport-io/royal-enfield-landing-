@@ -9,7 +9,7 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
 const OUT = path.join(ROOT, 'dist');
-const PUBLIC = ['index.html', 'terms.html', 'privacy.html', 'assets'];
+const PUBLIC = ['index.html', 'terms.html', 'privacy.html', 'accessibility.html', 'assets'];
 const SKIP = new Set(['README.md', '.gitkeep', '.DS_Store']);
 const IMAGE = /\.(webp|avif|jpe?g|png)$/i;
 

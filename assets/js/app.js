@@ -590,16 +590,18 @@
 
   // ---- Keep the focused element clear of the fixed bars (sticky CTA, WhatsApp button)
   function setupFocusClearance() {
-    var fixed = [$('sticky-cta'), document.querySelector('.wa-float'), $('cookie-banner')];
     document.addEventListener('focusin', function (e) {
       var target = e.target;
-      if (!target.getBoundingClientRect || fixed.some(function (f) { return f && f.contains(target); })) return;
+      // looked up on each focus: the accessibility menu is added after this script runs
+      var fixed = [$('sticky-cta'), document.querySelector('.wa-float'), $('cookie-banner'), document.querySelector('.a11y-toggle')];
+      if (!target.getBoundingClientRect || target.closest('.a11y') || fixed.some(function (f) { return f && f.contains(target); })) return;
       // wait a frame so the browser's own scroll-into-view and the sticky bar update land first
       requestAnimationFrame(function () {
         var r = target.getBoundingClientRect();
         var shift = 0;
         fixed.forEach(function (f) {
-          if (!f || getComputedStyle(f).display === 'none') return;
+          // only bars that float over the page; the cookie banner is fixed on phones only
+          if (!f || getComputedStyle(f).display === 'none' || getComputedStyle(f).position !== 'fixed') return;
           var b = f.getBoundingClientRect();
           if (b.top >= window.innerHeight) return; // bar is off-screen
           var overlapsX = r.left < b.right && r.right > b.left;
