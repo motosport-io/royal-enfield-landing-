@@ -599,7 +599,8 @@
         var r = target.getBoundingClientRect();
         var shift = 0;
         fixed.forEach(function (f) {
-          if (!f || getComputedStyle(f).display === 'none') return;
+          // only bars that float over the page; the cookie banner is fixed on phones only
+          if (!f || getComputedStyle(f).display === 'none' || getComputedStyle(f).position !== 'fixed') return;
           var b = f.getBoundingClientRect();
           if (b.top >= window.innerHeight) return; // bar is off-screen
           var overlapsX = r.left < b.right && r.right > b.left;

@@ -699,7 +699,7 @@ abbr[title] { text-decoration: underline dotted; cursor: help; }
     min-width: 0;
     min-height: 44px;
     padding: 6px 12px;
-    border: 2px solid var(--gold);
+    border: 2px solid var(--navy); /* gold on cream is 1.9:1; the control's edge needs 3:1 */
     border-radius: 0;
     background-color: var(--white);
     color: var(--navy);
