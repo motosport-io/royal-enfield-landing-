@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Builds terms.html and privacy.html from the approved texts in docs/legal/*.md.
+"""Builds terms.html, privacy.html and accessibility.html from the approved texts in docs/legal/*.md.
 
 The legal wording lives only in the .md files and is copied word for word; this script
 adds markup only (headings, paragraphs, bullet lists, mailto:/tel: links).
@@ -13,6 +13,7 @@ ROOT = Path(__file__).resolve().parent.parent
 PAGES = {
     'terms': {'title': 'תנאי שימוש', 'other': ('privacy', 'מדיניות פרטיות')},
     'privacy': {'title': 'מדיניות פרטיות', 'other': ('terms', 'תנאי שימוש')},
+    'accessibility': {'title': 'הצהרת נגישות', 'other': ('terms', 'תנאי שימוש')},
 }
 EMAIL = re.compile(r'[\w.+-]+@[\w-]+(?:\.[\w-]+)+')
 PHONE = re.compile(r'\b0\d{1,2}-\d{7}\b')
@@ -85,6 +86,7 @@ TEMPLATE = """<!doctype html>
         <li><a href="/">דף הנחיתה</a></li>
         <li><a href="/terms"{terms_current}>תנאי שימוש</a></li>
         <li><a href="/privacy"{privacy_current}>מדיניות פרטיות</a></li>
+        <li><a href="/accessibility"{accessibility_current}>הצהרת נגישות</a></li>
         <li><a href="/#cookies">הגדרות עוגיות</a></li>
       </ul>
     </div>
@@ -101,6 +103,7 @@ for slug, page in PAGES.items():
         body=body_html(md),
         terms_current=' aria-current="page"' if slug == 'terms' else '',
         privacy_current=' aria-current="page"' if slug == 'privacy' else '',
+        accessibility_current=' aria-current="page"' if slug == 'accessibility' else '',
     )
     (ROOT / f'{slug}.html').write_text(out, encoding='utf-8')
     print('wrote', f'{slug}.html')
