@@ -153,24 +153,12 @@
             <p class="lead__choice" id="lead-choice"></p>
           </div>
 
-          <div class="field">
-            <div class="check">
-              <input type="checkbox" id="f-privacy" name="privacy" required aria-describedby="f-privacy-error">
-              <label for="f-privacy">קראתי את <a href="/privacy" target="_blank" rel="noopener">מדיניות הפרטיות<span class="sr-only"> (נפתח בחלון חדש)</span></a> ואני מאשר את השימוש בפרטים שמסרתי לצורך טיפול בפנייתי. <span class="req" aria-hidden="true">*</span></label>
-            </div>
-            <p class="field__error" id="f-privacy-error"></p>
-          </div>
-
-          <div class="field">
-            <div class="check">
-              <input type="checkbox" id="f-marketing" name="marketing">
-              <label for="f-marketing">אני מאשר לקבל מד.ל.ב מוטוספורט בע״מ עדכונים, הטבות והצעות שיווקיות באמצעות דוא״ל, SMS ו־WhatsApp. ידוע לי שאוכל להסיר את הסכמתי בכל עת. <span class="check__optional">(לא חובה)</span></label>
-            </div>
-          </div>
-
           <p class="lead__note" id="submit-note">לחיצה על "שלח" תפתח את WhatsApp בחלון חדש עם הודעה מוכנה. הפנייה לא נשלחת מהאתר: היא תישלח רק אחרי שתבדקו את ההודעה ותלחצו "שליחה" ב-WhatsApp.</p>
 
-          <button type="submit" class="lead__submit" aria-describedby="submit-note">שלח <span aria-hidden="true">&laquo;</span></button>
+          <!-- Privacy notice: same wording as the contact form on motosport.co.il -->
+          <p class="lead__consent" id="consent-note">בלחיצה על שלח, הנני מאשר/ת כי ידוע לי שלא חלה עליי חובה חוקית למסור את פרטיי, ומסירתם נעשית מרצוני החופשי לצורך יצירת קשר עמי בנוגע לפנייתי זו בלבד. המידע יישמר במאגר מידע משותף של ד.ל.ב מוטוספורט בע"מ וקבוצת לובינסקי, ולא יועבר לצדדים שלישיים חיצוניים למעט ספקים המאבטחים ומעבדים את המידע עבורנו. אי-מסירת הפרטים לא תאפשר לכם לחזור אליי. למידע נוסף על זכויותיי לעיון, תיקון או מחיקה, הופניתי ל<a href="/privacy" target="_blank" rel="noopener">מדיניות הפרטיות<span class="sr-only"> (נפתח בחלון חדש)</span></a> של החברה.</p>
+
+          <button type="submit" class="lead__submit" aria-describedby="submit-note consent-note">שלח <span aria-hidden="true">&laquo;</span></button>
           <p class="lead__done" id="form-done" role="status"></p>
         </form>
       </div>

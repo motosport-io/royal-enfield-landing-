@@ -500,23 +500,8 @@ abbr[title] { text-decoration: underline dotted; cursor: help; }
 .field__error:empty { display: none; }
 .field__error:not(:empty)::before { content: "⚠ "; }
 .lead__choice { margin: 0; font-size: 15px; color: var(--gold-light); }
-.check {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  min-height: 44px;
-  font-size: 15px;
-}
-.check label { cursor: pointer; }
-.check input {
-  flex: none;
-  width: 28px; height: 28px;
-  margin: 0;
-  accent-color: var(--gold-light);
-  cursor: pointer;
-}
-.check label a { color: var(--link-on-navy); font-weight: 700; text-underline-offset: 3px; }
-.check__optional { color: var(--gold-light); white-space: nowrap; }
+.lead__consent { margin: 0; font-size: 14px; line-height: 1.6; }
+.lead__consent a { color: var(--link-on-navy); font-weight: 700; text-underline-offset: 3px; }
 .lead__note { margin: 0; font-size: 15px; }
 .lead__submit {
   align-self: center;
