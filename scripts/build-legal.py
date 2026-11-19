@@ -47,7 +47,9 @@ def body_html(md):
             items.append(line[2:])
         else:
             flush()
-            parts.append(f'      <p>{inline(line)}</p>')
+            # "עודכן לאחרונה: …" line under the title gets its own style
+            cls = ' class="legal__updated"' if line.startswith('עודכן לאחרונה') else ''
+            parts.append(f'      <p{cls}>{inline(line)}</p>')
     flush()
     return '\n'.join(parts)
 
