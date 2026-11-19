@@ -377,8 +377,7 @@
       name: $('f-name'),
       phone: $('f-phone'),
       city: $('f-city'),
-      email: $('f-email'),
-      privacy: $('f-privacy')
+      email: $('f-email')
     };
 
     function setError(input, message) {
@@ -397,7 +396,6 @@
       else if (!normalizePhone(fields.phone.value)) errors.push([fields.phone, 'מספר הטלפון אינו תקין. יש להקליד 9 או 10 ספרות, לדוגמה 050-1234567.']);
       if (!fields.city.value.trim()) errors.push([fields.city, 'יש להזין עיר מגורים']);
       if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errors.push([fields.email, 'כתובת הדוא"ל אינה תקינה. לדוגמה: name@example.com. אפשר גם להשאיר את השדה ריק.']);
-      if (!fields.privacy.checked) errors.push([fields.privacy, 'יש לאשר שקראת את מדיניות הפרטיות כדי לשלוח את הפנייה.']);
       return errors;
     }
 
@@ -446,10 +444,9 @@
       if (c.model.trims.length > 1 || c.trim.name) lines.push('רמת גימור: ' + trimLabel(c.trim));
       if (c.color) lines.push('צבע: ' + c.color.name);
       if (isComingSoon(c)) lines.push('סטטוס: בקרוב (הדגם בדרך לארץ)');
-      lines.push('אישור דיוור שיווקי: ' + ($('f-marketing').checked ? 'כן' : 'לא'));
 
       var url = waUrl(lines.join('\n'));
-      track('whatsapp_lead', { marketing_consent: $('f-marketing').checked });
+      track('whatsapp_lead', {});
 
       var win = window.open(url, '_blank', 'noopener');
       if (!win) window.location.href = url;

@@ -500,23 +500,8 @@ abbr[title] { text-decoration: underline dotted; cursor: help; }
 .field__error:empty { display: none; }
 .field__error:not(:empty)::before { content: "⚠ "; }
 .lead__choice { margin: 0; font-size: 15px; color: var(--gold-light); }
-.check {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  min-height: 44px;
-  font-size: 15px;
-}
-.check label { cursor: pointer; }
-.check input {
-  flex: none;
-  width: 28px; height: 28px;
-  margin: 0;
-  accent-color: var(--gold-light);
-  cursor: pointer;
-}
-.check label a { color: var(--link-on-navy); font-weight: 700; text-underline-offset: 3px; }
-.check__optional { color: var(--gold-light); white-space: nowrap; }
+.lead__consent { margin: 0; font-size: 14px; line-height: 1.6; }
+.lead__consent a { color: var(--link-on-navy); font-weight: 700; text-underline-offset: 3px; }
 .lead__note { margin: 0; font-size: 15px; }
 .lead__submit {
   align-self: center;
@@ -953,6 +938,7 @@ html.a11y-spacing body * { line-height: 1.8 !important; letter-spacing: .05em !i
   color: var(--navy);
 }
 .legal p { margin: 0 0 1.5em; font-size: 17px; }
+.legal p.legal__updated { margin-top: -4px; font-size: 16px; font-weight: 700; color: var(--navy); }
 .legal ul { margin: 0 0 1.5em; padding-inline-start: 1.4em; }
 .legal li { margin: 0 0 .75em; font-size: 17px; }
 .legal li::marker { color: var(--navy); }
